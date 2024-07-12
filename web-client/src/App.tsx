@@ -1,15 +1,11 @@
+import { RouterProvider } from "react-router-dom";
+import { GlobalContextProvider } from "./contexts/globalContext";
+import router from "./pages/router";
 
-
-function App() {
-  
-
+export default function App() {
   return (
-    <>
-    <div className='text-front text-2xl '>
-      hello dev
-    </div>
-    </>
-  )
+    <GlobalContextProvider>
+      <RouterProvider router={router} />
+    </GlobalContextProvider>
+  );
 }
-
-export default App

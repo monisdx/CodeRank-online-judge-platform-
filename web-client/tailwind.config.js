@@ -5,16 +5,32 @@ export default {
     extend: {
       screens: {
         mobile: { max: "780px" },
-        widescreen: { min: "1000px" },
-        tablet: {min: "780px", max: "1000px"},
+        widescreen: { min: "780px" },
+        // tablet: {min: "780px", max: "1000px"},
       },
       colors: {
-        primary: "#f36363 ",
-        secondary: "#2E3136",
+        primary: "#F97535",
+        secondary: "#71788B",
         background: "#ffffff",
         foreground: "#eef0f4",
         front: "#000000",
         back: "#ffffff",
+        black: {
+          1: "#15171C",
+          2: "#222429",
+          3: "#101114",
+          4: "#252525",
+          5: "#2E3036",
+          6: "#24272C",
+          7: "#1B1F29",
+        },
+        white: {
+          1: "#FFFFFF",
+          2: "rgba(255, 255, 255, 0.72)",
+          3: "rgba(255, 255, 255, 0.4)",
+          4: "rgba(255, 255, 255, 0.64)",
+          5: "rgba(255, 255, 255, 0.80)",
+        },
       },
       borderRadius: {
         inherit: "inherit",
