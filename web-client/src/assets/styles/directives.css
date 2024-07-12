@@ -1,0 +1,27 @@
+@property --property-name {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #c0ffee;
+  }
+  
+  @keyframes keyframes--w-full-to-none {
+    from {
+      width: 100%;
+    }
+    to {
+      width: 0%;
+    }
+  }
+  
+  @keyframes keyframes--forgot-password-page-background-slide {
+    from {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 1000% 1000%;
+    }
+    to {
+      background-position: 0% 0%;
+    }
+  }
+  
