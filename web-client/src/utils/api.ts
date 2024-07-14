@@ -1,6 +1,7 @@
 import axios from "axios";
 import { serverUrl } from "../config";
 import { clearTokenFromLocalStorage } from "./utils";
+import { User } from "../types";
 
 let jwt: string | null = null;
 
@@ -92,7 +93,66 @@ function ensureToken() {
 
 const api = {
   client: client,
-};
 
+  auth: {
+    async login(email: string, password: string) {
+      const response = await client.post<{ result: User; token: string }>(
+        "/auth/signin",
+        { email, password }
+      );
+
+      const userData = response.data;
+
+      checkAndHandleError(userData);
+
+      if (userData.token) {
+        setJwt(userData.token);
+        return userData;
+      }
+
+      return false;
+    },
+
+    async register(name: string, email: string, password: string) {
+      const response = await client.post<{ result: User; token: string }>(
+        "/auth/signup",
+        {
+          name,
+          email,
+          password,
+        }
+      );
+
+      const userData = response.data;
+
+      checkAndHandleError(userData);
+
+      if (userData.token) {
+        setJwt(userData.token);
+        return userData;
+      }
+
+      return false;
+    },
+
+    async loginWithGoogle(token: string) {
+      const response = await client.post<{ token: string }>(
+        "/auth/google-auth",
+        { token }
+      );
+
+      const userData = response.data;
+
+      checkAndHandleError(userData);
+
+      if (userData.token) {
+        setJwt(userData.token);
+        return userData;
+      }
+
+      return false;
+    },
+  },
+};
 
 export default api;

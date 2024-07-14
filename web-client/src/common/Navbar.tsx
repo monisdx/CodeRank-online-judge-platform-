@@ -24,12 +24,12 @@ export default function Navbar() {
         ))}
       </div>
       <div className="widescreen:flex hidden items-center justify-center bg-back p-[0.1rem] rounded-3xl">
-        <button
-          type="button"
+        <Link
+          to={"/auth"}
           className="flex px-5 py-2 font-medium font-cabin text-md rounded-3xl text-black-8 bg-back outline-none border-4 border-black-8"
         >
           Sign In
-        </button>
+        </Link>
       </div>
       <div className="widescreen:hidden flex flex-1 justify-end items-center z-[999]">
         <button className="relative" onClick={() => setMobileNav(!mobileNav)}>
@@ -52,12 +52,12 @@ export default function Navbar() {
               </Link>
             ))}
             <div className="flex items-center justify-center bg-back p-[0.1rem] rounded-3xl">
-              <button
-                type="button"
+              <Link
+                to={"/auth"}
                 className="flex px-5 py-2 font-medium font-cabin text-md rounded-3xl text-black-8 bg-back outline-none border-4 border-black-8"
               >
                 Sign In
-              </button>
+              </Link>
             </div>
           </div>
         </div>

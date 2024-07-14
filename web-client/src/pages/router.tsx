@@ -9,6 +9,7 @@ import ErrorPage from "./ErrorPage/ErrorPage";
 import HomePage from "./HomePage/HomePage";
 import ProblemListPage from "./ProblemListPage/ProblemListPage";
 import ProblemPage from "./ProblemPage/ProblemPage";
+import AuthPage from "./AuthPage/AuthPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -17,6 +18,7 @@ const router = createBrowserRouter(
         <Route index element={<HomePage/>} />
         <Route path="problems" element={<ProblemListPage/>} />
         <Route path="problems/:id" element={<ProblemPage/>}/>
+        <Route path="auth" element={<AuthPage/>}/>
       </Route>
       <Route path="*" element={<ErrorPage/>}/>
     </>
