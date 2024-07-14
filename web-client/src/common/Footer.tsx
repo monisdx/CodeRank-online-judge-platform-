@@ -1,8 +1,8 @@
 export default function Footer() {
   return (
-    <section className="bg-black-8">
-      <div className="container flex sm:justify-between justify-center items-center gap-10 max-sm:flex-col">
-        <p className="caption text-back lg:block">
+    <section className="bg-black-8 border-black-6 border">
+      <div className="flex p-8 justify-between items-center gap-10 max-sm:flex-col">
+        <p className="text-back">
           © {new Date().getFullYear()}. All rights reserved.
         </p>
 
