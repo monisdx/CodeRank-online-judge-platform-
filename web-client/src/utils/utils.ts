@@ -1,6 +1,11 @@
 import { AxiosResponse } from "axios";
 import { UnionToTuple } from "../types";
 
+export function generateArray(str:string): string[]{
+
+  return str.split(',').map(s=>s.trim());
+
+}
 
 export function generateRandomString(length: number, seed?: string) {
   let result = "";

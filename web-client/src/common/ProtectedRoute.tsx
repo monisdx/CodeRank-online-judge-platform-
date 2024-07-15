@@ -26,6 +26,7 @@ export default function ProtectedRoute(props: ProtectedRouteProps) {
   const redirectUrl = props.fallbackUrl || query.get("redirectUrl");
 
   console.log("User", user);
+  console.log(authenticated,loading);
 
   if (props.type === ProtectedTypes.PRIVATEONLY) {
     return (
@@ -35,7 +36,7 @@ export default function ProtectedRoute(props: ProtectedRouteProps) {
             {authenticated ? (
               <Outlet />
             ) : (
-              <Navigate to={`/auth/login?redirectUrl=${pathname}`} />
+              <Navigate to={`/auth/?redirectUrl=${pathname}`} />
             )}
           </>
         )}

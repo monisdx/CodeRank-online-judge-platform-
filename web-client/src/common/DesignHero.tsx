@@ -14,15 +14,16 @@ const Rings = () => {
   );
 };
 
-export const BackgroundCircles = ({ parallaxRef }:any) => {
+export const BackgroundCircles = ({top, parallaxRef }:any) => {
   const [mounted, setMounted] = useState(false);
-
+ 
   useEffect(() => {
     setMounted(true);
   }, []);
 
   return (
-    <div className="absolute -top-[42.375rem] left-1/2 w-[78rem] aspect-square border border-black-6 rounded-full -translate-x-1/2 md:-top-[38.5rem] xl:-top-[32rem]">
+    <div className="absolute mobile:-top-[42.375rem] left-1/2 w-[78rem] aspect-square border border-black-6 rounded-full -translate-x-1/2 "
+    style={{top: top}}>
       <Rings />
 
       {/* Moving background colored circle balls */}

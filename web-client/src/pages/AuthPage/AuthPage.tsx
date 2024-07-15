@@ -57,11 +57,11 @@ export default function AuthPage() {
     setIsSignUp(!isSignUp);
     setForm({ name: "", email: "", password: "", confirmpassword: "" });
   }
-  console.log(localStorage.getItem("codemaster_JWT_stored"));
+
   return (
     <section className="p-page overflow-hidden bg-black-8">
       <div className="relative" ref={parallaxRef}>
-        <div className=" relative flex items-center justify-center mobile:max-w-[25rem] mx-auto widescreen:max-w-5xl -mb-[10rem] mt-[20rem]">
+        <div className=" relative h-screen flex items-center justify-center mobile:max-w-[25rem] mx-auto widescreen:max-w-5xl -mb-[10rem] mt-[20rem]">
           <div className="relative z-1 widescreen:w-[60%] mobile:w-full flex-col bg-black-1 p-8 rounded-2xl gap-y-10 -top-[15rem]">
             <div className="flex items-center justify-center">
               <img
@@ -186,7 +186,7 @@ export default function AuthPage() {
                Continue With Google
               </GoogleLoginButton>
           </div>
-          <div className="absolute -top-[54%] left-[45%] widescreen:left-[46%] w-[234%] -translate-x-1/2 widescreen:w-[138%] widescreen:-top-[90%]">
+          <div className="absolute  -top-[54%] left-[45%] widescreen:left-[48%] w-[234%] -translate-x-1/2 widescreen:w-[138%] widescreen:-top-[90%]">
             <img
               src={"/images/hero-background.jpg"}
               className="w-full"
@@ -195,7 +195,7 @@ export default function AuthPage() {
               alt="hero"
             />
           </div>
-          <BackgroundCircles />
+          <BackgroundCircles top={'-23rem'} />
         </div>
       </div>
     </section>

@@ -13,7 +13,7 @@ export default function Contact() {
   function handleSubmit() {}
 
   return (
-    <section id="#contact" className="p-page py-10 bg-black-8">
+    <section id="contact" className="p-page py-10 bg-black-8">
       <div className="flex mobile:flex-col gap-x-10 mobile:gap-y-10 overflow-hidden">
         <div className="flex-col flex-[0.4] bg-black-1 p-8 rounded-2xl gap-y-10">
           <p className="text-secondary text-sm font-poppins tracking-wider uppercase">

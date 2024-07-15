@@ -35,7 +35,7 @@ export default function Hero() {
               alt="hero"
             />
           </div>
-          <BackgroundCircles />
+          <BackgroundCircles top={'-35rem'}/>
         </div>
       </div>
     </section>
