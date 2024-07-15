@@ -1,8 +1,21 @@
 import React, { useRef, useState } from "react";
 import { BackgroundCircles } from "../../common/DesignHero";
+import api from "../../utils/api";
+import useToast from "../../hooks/useToast";
+import { twMerge } from "tailwind-merge";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/authContext";
+import GoogleLoginButton from "./components/GoogleLoginButton";
 
 export default function AuthPage() {
   const parallaxRef = useRef(null);
+  const toast = useToast();
+  const navigate = useNavigate();
+  const auth = useAuth();
+
+  console.log(auth);
+  console.log(auth.user);
+
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -11,18 +24,44 @@ export default function AuthPage() {
   });
   const [showpassword, setshowpassword] = useState<boolean>(false);
   const [isSignUp, setIsSignUp] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  function handleSubmit() {}
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setLoading(true);
+
+    if (isSignUp) {
+      auth
+        .register(form.name, form.email, form.password, form.confirmpassword)
+        .catch((err) =>
+          toast.error({ title: err || "Error : Something bad happened" })
+        )
+        .finally(() => {
+          setLoading(false);
+          navigate("/");
+        });
+    } else {
+      auth
+        .login(form.email, form.password)
+        .catch((err) =>
+          toast.error({ title: err || "Error : Something bad happened" })
+        )
+        .finally(() => {
+          setLoading(false);
+          navigate("/");
+        });
+    }
+  }
 
   function switchmode() {
     setIsSignUp(!isSignUp);
     setForm({ name: "", email: "", password: "", confirmpassword: "" });
   }
-
+  console.log(localStorage.getItem("codemaster_JWT_stored"));
   return (
     <section className="p-page overflow-hidden bg-black-8">
       <div className="relative" ref={parallaxRef}>
-        <div className="relative flex items-center justify-center mobile:max-w-[25rem] mx-auto widescreen:max-w-5xl -mb-[10rem] mt-[20rem]">
+        <div className=" relative flex items-center justify-center mobile:max-w-[25rem] mx-auto widescreen:max-w-5xl -mb-[10rem] mt-[20rem]">
           <div className="relative z-1 widescreen:w-[60%] mobile:w-full flex-col bg-black-1 p-8 rounded-2xl gap-y-10 -top-[15rem]">
             <div className="flex items-center justify-center">
               <img
@@ -93,7 +132,7 @@ export default function AuthPage() {
                     name="confirmpassword"
                     required={true}
                     minLength={8}
-                    value={form.password}
+                    value={form.confirmpassword}
                     onChange={(e) =>
                       setForm({ ...form, [e.target.name]: e.target.value })
                     }
@@ -105,21 +144,47 @@ export default function AuthPage() {
 
               <button
                 type="submit"
-                className="bg-primary py-3 px-8 rounded-xl outline-none w-full text-back font-bold "
+                disabled={loading}
+                className={twMerge(
+                  "bg-primary hover:bg-primary/70 py-3 px-8 rounded-xl outline-none w-full text-back font-medium disabled:cursor-not-allowed disabled:animate-pulse"
+                )}
               >
                 <span>{isSignUp ? "Sign Up" : "Sign In"}</span>
               </button>
             </form>
-            <div className="flex justify-center items-center mt-8">
+            <div className="flex justify-center items-center mt-4">
               <button
                 className=" px-4 py-2 font-medium text-base text-back rounded-xl cursor-pointer  outline-none border-none"
                 onClick={switchmode}
               >
-                {isSignUp
-                  ? `Already have an account? Sign In`
-                  : `Dont't have an account? Sign Up`}
+                {isSignUp ? (
+                  <p>
+                    Already have an account?{" "}
+                    <span className="text-primary">Sign In</span>
+                  </p>
+                ) : (
+                  <p>
+                    Dont't have an account?{" "}
+                    <span className="text-primary">Sign Up</span>
+                  </p>
+                )}
               </button>
             </div>
+            <figure className="flex justify-center items-center gap-x-2 my-4">
+              <div className="h-[0.05rem] w-full bg-back/50" />
+              <p className="font-inter text-back/50 text-xs font-black-2 font-medium">
+                OR
+              </p>
+              <div className="h-[0.05rem] w-full bg-back/50" />
+            </figure>
+            <GoogleLoginButton
+                className={twMerge(
+                  "flex items-center justify-center gap-x-4 bg-black-1 hover:bg-black-7 duration-300 py-3 px-8 rounded-xl outline-none border border-black-2 w-full text-back font-medium disabled:cursor-not-allowed disabled:animate-pulse"
+                )}
+              >
+              <img src="/images/google.svg" alt="google logo" className="h-6"/>
+               Continue With Google
+              </GoogleLoginButton>
           </div>
           <div className="absolute -top-[54%] left-[45%] widescreen:left-[46%] w-[234%] -translate-x-1/2 widescreen:w-[138%] widescreen:-top-[90%]">
             <img

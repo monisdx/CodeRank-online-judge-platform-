@@ -16,7 +16,7 @@ export const signin = async(req: Request,res: Response) => {
 
         if(!existinguser) return res.status(404).json({ message: "user doesn't exit"});
 
-        const ispasswordcorrect = await bcrypt.compare(password,existinguser.password);
+        const ispasswordcorrect = await bcrypt.compare(password,existinguser.password || "");
         
         if(!ispasswordcorrect) return res.status(400).json({ message: "invalid credensials"});
 
@@ -30,7 +30,8 @@ export const signin = async(req: Request,res: Response) => {
     }
 }
 
-export const signup = async(req: Request,res: Response) => {
+export const signup = async(req: Request, res: Response) => {
+
     const { email, password, confirmpassword, name} = req.body;
 
     try{
@@ -57,7 +58,7 @@ export const signup = async(req: Request,res: Response) => {
 
 export const googleoauth = async(req: Request,res: Response) => {
     const {googletoken} = req.body;
-
+    console.log("jjj",googletoken);
     const user = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo",{
         headers: { Authorization: `Bearer ${googletoken}`}
     }).then(async res => res.data);

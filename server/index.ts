@@ -9,6 +9,8 @@ import dotenv from 'dotenv';
 const app = express();
 dotenv.config();
 
+app.use(bodyParser.json({limit: "30mb"}));      //properly send a request. This body-parser module parses the JSON, buffer, string and URL encoded data submitted using HTTP POST request.
+app.use(bodyParser.urlencoded({limit: "30mb", extended: true}));
 app.use(cors());
 
 app.use('/auth', userRoutes);

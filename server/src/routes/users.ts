@@ -5,6 +5,6 @@ const router = express.Router();
 
 router.post('/signin', signin);
 router.post('/signup', signup);
-router.post('/googleoauth', googleoauth);
+router.post('/google-oauth', googleoauth);
 
 export default router;

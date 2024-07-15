@@ -11,47 +11,38 @@ import useToast from "../hooks/useToast";
 
 interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
-  signInWithGoogle: (data: { code: string }) => Promise<void>;
+  signInWithGoogle: ( code: string ) => Promise<void>;
   register: (
     name: string,
     email: string,
     password: string,
+    confirmpassword:string,
   ) => Promise<void>;
   user: User | undefined;
   authenticated: boolean;
-  verified: boolean;
-  otp: {
-    request: () => void;
-    verify: (code: string) => void;
-    getWaitTime: () => number;
-  };
-  fetchUser: () => Promise<void>;
   loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
-const otpRequestTimeout = 5 * 60 * 1000;
 
 export function AuthContextProvider(props: { children: React.ReactNode }) {
   const flag = useRef(false);
-  const OTPsentAt = useRef(-1);
   const temporaryAccessToken = useRef("");
 
   const [user, setUser] = useState<User>();
   const [authenticated, setAuthenticated] = useState(false);
-  const [verified, setVerified] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const refreshComponent = useRefreshComponent();
   const toast = useToast();
 
-  async function fetchUser() {
-    if (authenticated) {
-      const userResponse = await api.user.getCurrentUser();
-      if (userResponse) setUser(userResponse.user);
-    }
-  }
+  // async function fetchUser() {
+  //   if (authenticated) {
+  //     const userResponse = await api.user.getCurrentUser();
+  //     if (userResponse) setUser(userResponse.user);
+  //   }
+  // }
 
   async function login(email: string, password: string) {
     const success = await api.auth
@@ -59,13 +50,16 @@ export function AuthContextProvider(props: { children: React.ReactNode }) {
       .catch((err) => toast.error({ title: err || "something went wrong" }));
     if (!success) return;
 
-    if (success.verified) {
-      setVerified(true);
+    if (success.token){
       saveTokenToLocalStorage(success.token);
-      localStorage.removeItem("mixr-lastOTPtimer");
-    } else {
-      temporaryAccessToken.current = success.token;
     }
+    temporaryAccessToken.current = success.token;
+
+    if(success.result){
+      setUser(success.result);
+    } 
+      // localStorage.removeItem("mixr-lastOTPtimer");
+   
 
     setAuthenticated(true);
     setTimeout(() => {
@@ -77,29 +71,38 @@ export function AuthContextProvider(props: { children: React.ReactNode }) {
     name: string,
     email: string,
     password: string,
+    confirmpassword:string,
   ) {
     const success = await api.auth
-      .register(name, email, password, referralCode)
+      .register(name, email, password, confirmpassword )
       .catch((err) => toast.error({ title: err || "something went wrong" }));
     if (!success) return;
 
     temporaryAccessToken.current = success.token;
 
+    if (success.token){
+      saveTokenToLocalStorage(success.token);
+    }
+    if(success.result){
+      setUser(success.result);
+    } 
+
     setAuthenticated(true);
     setTimeout(() => {
       refreshComponent.byId("page");
     }, 10);
   }
 
-  async function signInWithGoogle({ code }: { code: string }) {
+  async function signInWithGoogle( code: string ) {
+    console.log(code);
     const success = await api.auth
       .loginWithGoogle(code)
       .catch((err) => toast.error({ title: err || "something went wrong" }));
     if (!success) return;
 
-    setVerified(true);
+    console.log(success);
     saveTokenToLocalStorage(success.token);
-    localStorage.removeItem("mixr-lastOTPtimer");
+    // localStorage.removeItem("mixr-la
 
     setAuthenticated(true);
     setTimeout(() => {
@@ -107,49 +110,49 @@ export function AuthContextProvider(props: { children: React.ReactNode }) {
     }, 10);
   }
 
-  const otp = {
-    request() {
-      if (OTPsentAt.current + otpRequestTimeout < Date.now()) {
-        const prevTimer = OTPsentAt.current;
-        localStorage.setItem("mixr-lastOTPtimer", Date.now().toString());
-        OTPsentAt.current = Date.now();
-        api.auth
-          .generateVerificationCode()
-          .then((res) => {
-            res
-              ? toast.display({ title: res })
-              : toast.error({ title: "Unkown Error while sending email" });
-          })
-          .catch((err) => {
-            toast.error(err);
-            OTPsentAt.current = prevTimer;
-            localStorage.setItem("mixr-lastOTPtimer", prevTimer.toString());
-          });
-      }
-    },
+  // const otp = {
+  //   request() {
+  //     if (OTPsentAt.current + otpRequestTimeout < Date.now()) {
+  //       const prevTimer = OTPsentAt.current;
+  //       localStorage.setItem("mixr-lastOTPtimer", Date.now().toString());
+  //       OTPsentAt.current = Date.now();
+  //       api.auth
+  //         .generateVerificationCode()
+  //         .then((res) => {
+  //           res
+  //             ? toast.display({ title: res })
+  //             : toast.error({ title: "Unkown Error while sending email" });
+  //         })
+  //         .catch((err) => {
+  //           toast.error(err);
+  //           OTPsentAt.current = prevTimer;
+  //           localStorage.setItem("mixr-lastOTPtimer", prevTimer.toString());
+  //         });
+  //     }
+  //   },
 
-    getWaitTime() {
-      return Math.max(OTPsentAt.current + otpRequestTimeout - Date.now(), 0);
-    },
+  //   getWaitTime() {
+  //     return Math.max(OTPsentAt.current + otpRequestTimeout - Date.now(), 0);
+  //   },
 
-    verify(code: string) {
-      api.auth
-        .verify(code)
-        .then((res) => {
-          res
-            ? toast.display({ title: "Successfully verified" })
-            : toast.error({ title: "Unkown Error while verifying OTP" });
+  //   verify(code: string) {
+  //     api.auth
+  //       .verify(code)
+  //       .then((res) => {
+  //         res
+  //           ? toast.display({ title: "Successfully verified" })
+  //           : toast.error({ title: "Unkown Error while verifying OTP" });
 
-          if (res) {
-            temporaryAccessToken.current &&
-              saveTokenToLocalStorage(temporaryAccessToken.current);
-            fetchUser();
-            setVerified(true);
-          }
-        })
-        .catch((err) => toast.error(err));
-    },
-  };
+  //         if (res) {
+  //           temporaryAccessToken.current &&
+  //             saveTokenToLocalStorage(temporaryAccessToken.current);
+  //           fetchUser();
+  //           setVerified(true);
+  //         }
+  //       })
+  //       .catch((err) => toast.error(err));
+  //   },
+  // };
 
   useEffect(() => {
     if (!flag.current) {
@@ -161,11 +164,7 @@ export function AuthContextProvider(props: { children: React.ReactNode }) {
         }
         setJwt(localToken);
         setAuthenticated(true);
-        setVerified(true);
       }
-
-      const storedOTPsentAt = localStorage.getItem("mixr-lastOTPtimer");
-      if (storedOTPsentAt) OTPsentAt.current = Number(storedOTPsentAt);
 
       flag.current = true;
 
@@ -175,18 +174,13 @@ export function AuthContextProvider(props: { children: React.ReactNode }) {
     }
   }, []);
 
-  useEffect(() => {
-    fetchUser();
-  }, [authenticated]);
+ 
 
   const value: AuthContextType = {
     login,
     register,
     user,
     authenticated,
-    verified,
-    otp,
-    fetchUser,
     loading,
     signInWithGoogle,
   };
@@ -199,3 +193,6 @@ export function AuthContextProvider(props: { children: React.ReactNode }) {
 export function useAuth() {
   return useContext(AuthContext);
 }
+
+
+

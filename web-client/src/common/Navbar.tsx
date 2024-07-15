@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Icon from "./Icon";
+import api, { isAuthTokenPresent } from "../utils/api";
 
 export default function Navbar() {
   const [mobileNav, setMobileNav] = useState<boolean>(false);
+  const isAuth = isAuthTokenPresent();
+  const navigate = useNavigate();
+  console.log(isAuth);
 
   return (
     <nav className="p-page w-full flex py-5 justify-evenly items-center z-[999] bg-black-8 border-black-6 border-b-2">
@@ -23,14 +27,28 @@ export default function Navbar() {
           </Link>
         ))}
       </div>
-      <div className="widescreen:flex hidden items-center justify-center bg-back p-[0.1rem] rounded-3xl">
-        <Link
-          to={"/auth"}
-          className="flex px-5 py-2 font-medium font-cabin text-md rounded-3xl text-black-8 bg-back outline-none border-4 border-black-8"
-        >
-          Sign In
-        </Link>
-      </div>
+      {isAuth ? (
+        <div className="widescreen:flex hidden items-center justify-center bg-back p-[0.1rem] rounded-3xl">
+          <button 
+          onClick={()=> {
+            api.auth.logout()
+            .finally(()=>navigate('/'));
+          }}
+          className="flex px-5 py-2 font-medium font-cabin text-md rounded-3xl text-black-8 bg-back outline-none border-4 border-black-8">
+            Log Out
+          </button>
+        </div>
+      ) : (
+        <div className="widescreen:flex hidden items-center justify-center bg-back p-[0.1rem] rounded-3xl">
+          <Link
+            to={"/auth"}
+            className="flex px-5 py-2 font-medium font-cabin text-md rounded-3xl text-black-8 bg-back outline-none border-4 border-black-8"
+          >
+            Sign In
+          </Link>
+        </div>
+      )}
+
       <div className="widescreen:hidden flex flex-1 justify-end items-center z-[999]">
         <button className="relative" onClick={() => setMobileNav(!mobileNav)}>
           <Icon
@@ -51,14 +69,27 @@ export default function Navbar() {
                 {item.title}
               </Link>
             ))}
-            <div className="flex items-center justify-center bg-back p-[0.1rem] rounded-3xl">
-              <Link
-                to={"/auth"}
-                className="flex px-5 py-2 font-medium font-cabin text-md rounded-3xl text-black-8 bg-back outline-none border-4 border-black-8"
-              >
-                Sign In
-              </Link>
-            </div>
+            {isAuth ? (
+              <div className="flex items-center justify-center bg-back p-[0.1rem] rounded-3xl">
+                <button
+                onClick={()=> {
+                  api.auth.logout()
+                  .finally(()=>navigate('/'))
+                }}
+                 className="flex px-5 py-2 font-medium font-cabin text-md rounded-3xl text-black-8 bg-back outline-none border-4 border-black-8">
+                  Log Out
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center justify-center bg-back p-[0.1rem] rounded-3xl">
+                <Link
+                  to={"/auth"}
+                  className="flex px-5 py-2 font-medium font-cabin text-md rounded-3xl text-black-8 bg-back outline-none border-4 border-black-8"
+                >
+                  Sign In
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>

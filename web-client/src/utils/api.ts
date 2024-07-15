@@ -113,14 +113,33 @@ const api = {
       return false;
     },
 
-    async register(name: string, email: string, password: string) {
+    async register(name: string, email: string, password: string,confirmpassword:string) {
+      
       const response = await client.post<{ result: User; token: string }>(
         "/auth/signup",
         {
           name,
           email,
           password,
+          confirmpassword,
         }
+      );
+      const userData = response.data;
+
+      checkAndHandleError(userData);
+
+      if (userData.token) {
+        setJwt(userData.token);
+        return userData;
+      }
+
+      return false;
+    },
+
+    async loginWithGoogle(googletoken: string) {
+      const response = await client.post<{ token: string }>(
+        "/auth/google-oauth",
+        { googletoken }
       );
 
       const userData = response.data;
@@ -135,22 +154,10 @@ const api = {
       return false;
     },
 
-    async loginWithGoogle(token: string) {
-      const response = await client.post<{ token: string }>(
-        "/auth/google-auth",
-        { token }
-      );
-
-      const userData = response.data;
-
-      checkAndHandleError(userData);
-
-      if (userData.token) {
-        setJwt(userData.token);
-        return userData;
-      }
-
-      return false;
+    async logout() {
+      clearTokenFromLocalStorage();
+      clearJwt();
+      // location.reload();
     },
   },
 };

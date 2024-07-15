@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios";
 import { UnionToTuple } from "../types";
 
+
 export function generateRandomString(length: number, seed?: string) {
   let result = "";
   const characters =
@@ -143,17 +144,17 @@ export function getRandomFromArray<T>(array: Array<T>): T {
 }
 
 export function saveTokenToLocalStorage(token: string) {
-  localStorage.setItem("mixr_JWT_stored", token);
+  localStorage.setItem("codemaster_JWT_stored", token);
 }
 
 export function getTokenFromLocalStorage() {
-  const localCookie = localStorage.getItem("mixr_JWT_stored");
+  const localCookie = localStorage.getItem("codemaster_JWT_stored");
   if (!localCookie) return false;
   return localCookie;
 }
 
 export function clearTokenFromLocalStorage() {
-  localStorage.removeItem("mixr_JWT_stored");
+  localStorage.removeItem("codemaster_JWT_stored");
 }
 
 export async function getDominantColorFromImage(
