@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import userRoutes from './src/routes/users.ts';
+import problemRoutes from './src/routes/problems.ts';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
@@ -14,6 +15,7 @@ app.use(bodyParser.urlencoded({limit: "30mb", extended: true}));
 app.use(cors());
 
 app.use('/auth', userRoutes);
+app.use('./problem', problemRoutes);
 
 const PORT = Number(process.env.PORT) || 9090;
 

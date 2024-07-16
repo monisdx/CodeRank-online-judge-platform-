@@ -26,7 +26,6 @@ export const signin = async(req: Request,res: Response) => {
     }
     catch(error){
         res.status(500).json({message: 'something went wrong'})
-        console.log(error)
     }
 }
 
@@ -51,7 +50,6 @@ export const signup = async(req: Request, res: Response) => {
     }
     catch(error){
         res.status(500).json({message: 'something went wrong'})
-        console.log(error);
     }
 }
 
@@ -87,7 +85,6 @@ export const googleoauth = async(req: Request,res: Response) => {
 }
 catch(error){
     res.status(500).json({message: 'something went wrong'})
-    console.log(error);
 }
 
 }
