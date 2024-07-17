@@ -11,12 +11,12 @@ import useToast from "../hooks/useToast";
 
 interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
-  signInWithGoogle: ( code: string ) => Promise<void>;
+  signInWithGoogle: (code: string) => Promise<void>;
   register: (
     name: string,
     email: string,
     password: string,
-    confirmpassword:string,
+    confirmpassword: string
   ) => Promise<void>;
   user: User | undefined;
   authenticated: boolean;
@@ -24,7 +24,6 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
-
 
 export function AuthContextProvider(props: { children: React.ReactNode }) {
   const flag = useRef(false);
@@ -50,16 +49,15 @@ export function AuthContextProvider(props: { children: React.ReactNode }) {
       .catch((err) => toast.error({ title: err || "something went wrong" }));
     if (!success) return;
 
-    if (success.token){
+    if (success.token) {
       saveTokenToLocalStorage(success.token);
     }
     temporaryAccessToken.current = success.token;
-
-    if(success.result){
+    console.log(success);
+    if (success.result) {
       setUser(success.result);
-    } 
-      // localStorage.removeItem("mixr-lastOTPtimer");
-   
+    }
+    // localStorage.removeItem("mixr-lastOTPtimer");
 
     setAuthenticated(true);
     setTimeout(() => {
@@ -71,21 +69,21 @@ export function AuthContextProvider(props: { children: React.ReactNode }) {
     name: string,
     email: string,
     password: string,
-    confirmpassword:string,
+    confirmpassword: string
   ) {
     const success = await api.auth
-      .register(name, email, password, confirmpassword )
+      .register(name, email, password, confirmpassword)
       .catch((err) => toast.error({ title: err || "something went wrong" }));
     if (!success) return;
 
     temporaryAccessToken.current = success.token;
 
-    if (success.token){
+    if (success.token) {
       saveTokenToLocalStorage(success.token);
     }
-    if(success.result){
+    if (success.result) {
       setUser(success.result);
-    } 
+    }
 
     setAuthenticated(true);
     setTimeout(() => {
@@ -93,15 +91,14 @@ export function AuthContextProvider(props: { children: React.ReactNode }) {
     }, 10);
   }
 
-  async function signInWithGoogle( code: string ) {
-    console.log(code);
+  async function signInWithGoogle(code: string) {
     const success = await api.auth
       .loginWithGoogle(code)
       .catch((err) => toast.error({ title: err || "something went wrong" }));
     if (!success) return;
 
-    console.log(success);
     saveTokenToLocalStorage(success.token);
+    setUser(success.result);
     // localStorage.removeItem("mixr-la
 
     setAuthenticated(true);
@@ -174,8 +171,6 @@ export function AuthContextProvider(props: { children: React.ReactNode }) {
     }
   }, []);
 
- 
-
   const value: AuthContextType = {
     login,
     register,
@@ -193,6 +188,3 @@ export function AuthContextProvider(props: { children: React.ReactNode }) {
 export function useAuth() {
   return useContext(AuthContext);
 }
-
-
-

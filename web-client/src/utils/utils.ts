@@ -1,10 +1,12 @@
 import { AxiosResponse } from "axios";
 import { UnionToTuple } from "../types";
 
-export function generateArray(str:string): string[]{
+export function generateArray(str: string): string[] {
+  return str.split(",").map((s) => s.trim());
+}
 
-  return str.split(',').map(s=>s.trim());
-
+export function generateString(array: string[]): string {
+  return array.join(", ");
 }
 
 export function generateRandomString(length: number, seed?: string) {

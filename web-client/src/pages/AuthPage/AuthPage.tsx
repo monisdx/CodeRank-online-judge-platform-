@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { BackgroundCircles } from "../../common/DesignHero";
-import api from "../../utils/api";
+
 import useToast from "../../hooks/useToast";
 import { twMerge } from "tailwind-merge";
 import { useNavigate } from "react-router-dom";
@@ -178,13 +178,13 @@ export default function AuthPage() {
               <div className="h-[0.05rem] w-full bg-back/50" />
             </figure>
             <GoogleLoginButton
-                className={twMerge(
-                  "flex items-center justify-center gap-x-4 bg-black-1 hover:bg-black-7 duration-300 py-3 px-8 rounded-xl outline-none border border-black-2 w-full text-back font-medium disabled:cursor-not-allowed disabled:animate-pulse"
-                )}
-              >
-              <img src="/images/google.svg" alt="google logo" className="h-6"/>
-               Continue With Google
-              </GoogleLoginButton>
+              className={twMerge(
+                "flex items-center justify-center gap-x-4 bg-black-1 hover:bg-black-7 duration-300 py-3 px-8 rounded-xl outline-none border border-black-2 w-full text-back font-medium disabled:cursor-not-allowed disabled:animate-pulse"
+              )}
+            >
+              <img src="/images/google.svg" alt="google logo" className="h-6" />
+              Continue With Google
+            </GoogleLoginButton>
           </div>
           <div className="absolute  -top-[54%] left-[45%] widescreen:left-[48%] w-[234%] -translate-x-1/2 widescreen:w-[138%] widescreen:-top-[90%]">
             <img
@@ -195,7 +195,7 @@ export default function AuthPage() {
               alt="hero"
             />
           </div>
-          <BackgroundCircles top={'-23rem'} />
+          <BackgroundCircles top={"-23rem"} />
         </div>
       </div>
     </section>

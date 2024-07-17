@@ -1,7 +1,7 @@
 import axios from "axios";
 import { serverUrl } from "../config";
 import { clearTokenFromLocalStorage } from "./utils";
-import { User } from "../types";
+import { Problem, User } from "../types";
 
 let jwt: string | null = null;
 
@@ -113,8 +113,12 @@ const api = {
       return false;
     },
 
-    async register(name: string, email: string, password: string,confirmpassword:string) {
-      
+    async register(
+      name: string,
+      email: string,
+      password: string,
+      confirmpassword: string
+    ) {
       const response = await client.post<{ result: User; token: string }>(
         "/auth/signup",
         {
@@ -137,7 +141,7 @@ const api = {
     },
 
     async loginWithGoogle(googletoken: string) {
-      const response = await client.post<{ token: string }>(
+      const response = await client.post<{ result: User; token: string }>(
         "/auth/google-oauth",
         { googletoken }
       );
@@ -157,7 +161,87 @@ const api = {
     async logout() {
       clearTokenFromLocalStorage();
       clearJwt();
-      // location.reload();
+      location.reload();
+    },
+  },
+  problem: {
+    async getAllProblems() {
+      const response = await client.get<{ problemlist: Problem[] }>("/problem");
+
+      const data = response.data;
+
+      checkAndHandleError(data);
+
+      return data;
+    },
+
+    async addProblem(
+      title: string,
+      description: string,
+      difficulty: string,
+      constraints: string[],
+      inputformat: string,
+      outputformat: string,
+      exampleinput: string[],
+      exampleoutput: string[]
+    ) {
+      const response = await client.post<{ message: string }>("/problem", {
+        title,
+        description,
+        difficulty,
+        constraints,
+        inputformat,
+        outputformat,
+        exampleinput,
+        exampleoutput,
+      });
+
+      const data = response.data;
+
+      checkAndHandleError(data);
+
+      return data.message;
+    },
+
+    async updateProblem(
+      id: string,
+      title: string,
+      description: string,
+      difficulty: string,
+      constraints: string[],
+      inputformat: string,
+      outputformat: string,
+      exampleinput: string[],
+      exampleoutput: string[]
+    ) {
+      const response = await client.put<{ message: string }>(`/problem/${id}`, {
+        title,
+        description,
+        difficulty,
+        constraints,
+        inputformat,
+        outputformat,
+        exampleinput,
+        exampleoutput,
+      });
+
+      const data = response.data;
+
+      checkAndHandleError(data);
+
+      return data.message;
+    },
+
+    async removeProblem(id: string) {
+      const response = await client.delete<{ message: string }>(
+        `/problem/${id}`
+      );
+
+      const data = response.data;
+
+      checkAndHandleError(data);
+
+      return data.message;
     },
   },
 };
