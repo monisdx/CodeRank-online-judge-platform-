@@ -24,16 +24,16 @@ const router = createBrowserRouter(
           <Route path="problems/:id" element={<ProblemPage />} />
           <Route path="auth" element={<AuthPage />} />
         </Route>
-        {/* <Route
-      path="/"
-      element={<ProtectedRoute type={ProtectedTypes.PRIVATEONLY}/>}
-      > */}
-        <Route path="admin">
-          <Route index element={<AdminPage />} />
+        <Route
+          path="/"
+          element={<ProtectedRoute type={ProtectedTypes.PRIVATEONLY} />}
+        >
+          <Route path="admin">
+            <Route index element={<AdminPage />} />
+          </Route>
         </Route>
+        <Route path="*" element={<ErrorPage />} />
       </Route>
-      <Route path="*" element={<ErrorPage />} />
-      {/* </Route> */}
     </>
   )
 );

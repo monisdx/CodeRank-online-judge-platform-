@@ -15,7 +15,7 @@ export default function Contact() {
   return (
     <section id="contact" className="p-page py-10 bg-black-8">
       <div className="flex mobile:flex-col gap-x-10 mobile:gap-y-10 overflow-hidden">
-        <div className="flex-col flex-[0.4] bg-black-1 p-8 rounded-2xl gap-y-10">
+        <div className="flex-col flex-[0.4] bg-black-3 p-8 rounded-2xl gap-y-10">
           <p className="text-secondary text-sm font-poppins tracking-wider uppercase">
             Get in touch
           </p>
@@ -33,9 +33,11 @@ export default function Contact() {
                 type="text"
                 name="name"
                 value={form.name}
-                onChange={(e)=>setForm({...form,[e.target.name]:e.target.value})}
+                onChange={(e) =>
+                  setForm({ ...form, [e.target.name]: e.target.value })
+                }
                 placeholder="What's your good name?"
-                className="bg-black-7 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium"
+                className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium"
               />
             </label>
             <label className="flex flex-col">
@@ -44,9 +46,11 @@ export default function Contact() {
                 type="email"
                 name="email"
                 value={form.email}
-                onChange={(e)=>setForm({...form,[e.target.name]:e.target.value})}
+                onChange={(e) =>
+                  setForm({ ...form, [e.target.name]: e.target.value })
+                }
                 placeholder="What's your web address?"
-                className="bg-black-7 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium"
+                className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium"
               />
             </label>
             <label className="flex flex-col">
@@ -55,9 +59,11 @@ export default function Contact() {
                 rows={4}
                 name="message"
                 value={form.message}
-                onChange={(e)=>setForm({...form,[e.target.name]:e.target.value})}
+                onChange={(e) =>
+                  setForm({ ...form, [e.target.name]: e.target.value })
+                }
                 placeholder="What you want to say?"
-                className="bg-black-7 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium"
+                className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium"
               />
             </label>
 
@@ -70,8 +76,16 @@ export default function Contact() {
           </form>
         </div>
         <div className="flex flex-[0.6] items-center justify-center relative">
-          <img src={"/images/4-small.png"} alt="sphere" className="z-1 relative w-[20rem] h-[20rem]" />
-          <img src={"/images/stars.svg"} alt="star" className="absolute w-full"/>
+          <img
+            src={"/images/4-small.png"}
+            alt="sphere"
+            className="z-1 relative w-[20rem] h-[20rem]"
+          />
+          <img
+            src={"/images/stars.svg"}
+            alt="star"
+            className="absolute w-full"
+          />
         </div>
       </div>
     </section>
