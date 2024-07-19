@@ -1,6 +1,5 @@
-import React from "react";
-import Icon from "../../common/Icon";
 import { twMerge } from "tailwind-merge";
+import CodeEditor from "./components/CodeEditor";
 
 const problem = {
   title: "Title of the problems",
@@ -17,9 +16,9 @@ const problem = {
 
 export default function ProblemPage() {
   return (
-    <section className="min-h-screen mx-auto bg-black-3 px-[2vw] py-10 flex mobile:flex-col justify-between mobile:gap-y-10 widescreen:gap-x-10">
-      <div className="flex widescreen:flex-[.4] flex-col items-center gap-y-4">
-        <div className=" w-full flex flex-col gap-y-2">
+    <section className="mx-auto bg-black-3 px-[2vw] py-8 flex mobile:flex-col justify-between mobile:gap-y-10 widescreen:gap-x-6">
+      <div className="h-[82vh] flex widescreen:flex-[.4] flex-col items-center gap-y-4">
+        <div className=" w-full flex flex-col gap-y-2 overflow-y-auto scrollbar-primary">
           <h1 className="font-inter font-bold text-back text-2xl">
             {problem.title}
           </h1>
@@ -87,15 +86,8 @@ export default function ProblemPage() {
           </div>
         </div>
       </div>
-      <div className=" h-screen flex flex-col widescreen:flex-[.6] items-center gap-y-4 bg-black-1 rounded-xl p-1">
-        <div className="flex justify-between items-center p-4 w-full">
-          <p className="text-back flex items-center gap-x-2 font-medium text-lg font-inter">
-            <Icon icon="code" className="text-primary text-2xl" />
-            Code
-          </p>
-          <p className="text-back font-medium text-lg font-inter">Language</p>
-        </div>
-        <div className="flex items-center justify-center bg-black-3 h-[30rem] w-full"></div>
+      <div className="h-[82vh] flex flex-col widescreen:flex-[.6] items-center bg-black-1 rounded-xl p-1">
+        <CodeEditor />
       </div>
     </section>
   );
