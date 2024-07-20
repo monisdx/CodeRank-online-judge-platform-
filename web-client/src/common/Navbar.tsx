@@ -32,7 +32,7 @@ export default function Navbar() {
         <div className="widescreen:flex hidden items-center justify-center bg-back p-[0.1rem] rounded-3xl">
           <button
             onClick={() => {
-              api.auth.logout().finally(() => {});
+              api.auth.logout().finally(() => navigate("/"));
             }}
             className="flex px-5 py-2 font-medium font-cabin text-md rounded-3xl text-black-8 bg-back outline-none border-4 border-black-8"
           >

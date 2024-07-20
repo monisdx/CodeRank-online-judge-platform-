@@ -2,6 +2,7 @@ import { Editor } from "@monaco-editor/react";
 import { useRef, useState } from "react";
 import Icon from "../../../common/Icon";
 import { twMerge } from "tailwind-merge";
+import { useAuth } from "../../../contexts/authContext";
 
 export default function CodeEditor() {
   const editorRef = useRef();
@@ -9,6 +10,8 @@ export default function CodeEditor() {
   const [dropDown, setDropDown] = useState<boolean>(false);
   const [lang, setLang] = useState<string>("cpp");
   const [active, setActive] = useState<number>(1);
+
+  const { authenticated } = useAuth();
 
   const options = {
     minimap: {
@@ -28,7 +31,12 @@ export default function CodeEditor() {
 
   return (
     <>
-      <div className="w-full flex flex-col overflow-y-auto scrollbar-primary">
+      <div
+        className={twMerge(
+          "w-full flex flex-col overflow-y-auto scrollbar-primary",
+          !authenticated && "blur-sm brightness-90"
+        )}
+      >
         <div className="flex justify-between items-center p-4 w-full">
           <p className="text-back flex items-center gap-x-2 font-medium text-lg font-inter">
             <Icon icon="code" className="text-primary text-2xl" />
@@ -108,7 +116,7 @@ export default function CodeEditor() {
               name="input"
               // value={form.inputformat}
               // onChange={handleChange}
-              className="w-full bg-black-1 py-4 px-6 text-back rounded-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary"
+              className="w-full bg-black-1 py-4 px-6 text-back rounded-b-lg rounded-tr-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary"
             />
           )}
           {active === 2 && (

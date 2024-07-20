@@ -22,7 +22,12 @@ const router = createBrowserRouter(
           <Route index element={<HomePage />} />
           <Route path="problems" element={<ProblemListPage />} />
           <Route path="problems/:id" element={<ProblemPage />} />
-          <Route path="auth" element={<AuthPage />} />
+          <Route
+            path="/"
+            element={<ProtectedRoute type={ProtectedTypes.PUBLICONLY} />}
+          >
+            <Route path="auth" element={<AuthPage />} />
+          </Route>
         </Route>
         <Route
           path="/"

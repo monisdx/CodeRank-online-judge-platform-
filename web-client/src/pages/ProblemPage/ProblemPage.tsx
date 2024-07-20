@@ -1,5 +1,8 @@
 import { twMerge } from "tailwind-merge";
 import CodeEditor from "./components/CodeEditor";
+import { Link } from "react-router-dom";
+import { useAuth } from "../../contexts/authContext";
+import Icon from "../../common/Icon";
 
 const problem = {
   title: "Title of the problems",
@@ -15,6 +18,8 @@ const problem = {
 };
 
 export default function ProblemPage() {
+  const { authenticated } = useAuth();
+
   return (
     <section className="mx-auto bg-black-3 px-[2vw] py-8 flex mobile:flex-col justify-between mobile:gap-y-10 widescreen:gap-x-6">
       <div className="h-[82vh] flex widescreen:flex-[.4] flex-col items-center gap-y-4">
@@ -86,7 +91,22 @@ export default function ProblemPage() {
           </div>
         </div>
       </div>
-      <div className="h-[82vh] flex flex-col widescreen:flex-[.6] items-center bg-black-1 rounded-xl p-1">
+      <div className="h-[82vh] flex flex-col widescreen:flex-[.6] items-center bg-black-1 rounded-xl p-1 relative">
+        {!authenticated && (
+          <article className="absolute flex flex-col gap-y-10 justify-center items-center z-[999] mt-[10rem]">
+            <Icon icon="locked" className="text-primary text-9xl" />
+            <h1 className="text-back font-medium font-inter text-4xl">
+              Please SignIn To Continue{" "}
+              <span className="text-primary">Solving Problem</span>
+            </h1>
+            <Link
+              to="/auth"
+              className="bg-primary px-4 py-2 text-back font-inter font-medium rounded-lg"
+            >
+              Sign In
+            </Link>
+          </article>
+        )}
         <CodeEditor />
       </div>
     </section>

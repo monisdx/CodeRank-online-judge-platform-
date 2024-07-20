@@ -1,8 +1,4 @@
-import {
-  Navigate,
-  Outlet,
-  useLocation,
-} from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/authContext";
 import useQueryParams from "../hooks/useQueryParams";
 
@@ -26,7 +22,7 @@ export default function ProtectedRoute(props: ProtectedRouteProps) {
   const redirectUrl = props.fallbackUrl || query.get("redirectUrl");
 
   console.log("User", user);
-  console.log(authenticated,loading);
+  console.log(authenticated, loading);
 
   if (props.type === ProtectedTypes.PRIVATEONLY) {
     return (
@@ -36,7 +32,7 @@ export default function ProtectedRoute(props: ProtectedRouteProps) {
             {authenticated ? (
               <Outlet />
             ) : (
-              <Navigate to={`/auth/?redirectUrl=${pathname}`} />
+              <Navigate to={`/auth?redirectUrl=${pathname}`} />
             )}
           </>
         )}
@@ -64,7 +60,7 @@ export default function ProtectedRoute(props: ProtectedRouteProps) {
             {authenticated && user && user.isadmin ? (
               <Outlet />
             ) : (
-              <Navigate to={`/auth/login?redirectUrl=${pathname}`} />
+              <Navigate to={`/auth?redirectUrl=${pathname}`} />
             )}
           </>
         )}

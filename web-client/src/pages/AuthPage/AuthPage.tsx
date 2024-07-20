@@ -187,15 +187,9 @@ export default function AuthPage() {
             </div>
           </div>
           <div className="absolute  -top-[54%] left-[45%] widescreen:left-[48%] w-[234%] -translate-x-1/2 widescreen:w-[138%] widescreen:-top-[90%]">
-            <img
-              src={"/images/hero-background.jpg"}
-              className="w-full"
-              width={1440}
-              height={1800}
-              alt="hero"
-            />
+            <img src={"/images/hero-background.jpg"} className="" alt="hero" />
           </div>
-          <BackgroundCircles top={"-23rem"} />
+          <BackgroundCircles top={"-20rem"} />
         </div>
       </div>
     </section>

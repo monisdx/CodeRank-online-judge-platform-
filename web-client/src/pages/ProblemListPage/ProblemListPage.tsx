@@ -16,9 +16,9 @@ export default function ProblemListPage() {
   const problems = data?.problemlist;
 
   return (
-    <section className="min-h-screen mx-auto bg-black-3 p-page py-10 flex mobile:flex-col-reverse justify-between gap-x-10">
+    <section className="min-h-screen mx-auto bg-black-3 p-page py-10 flex mobile:flex-col-reverse justify-between mobile:gap-y-10 widescreen:gap-x-10">
       <div className="flex widescreen:flex-[.7] flex-col gap-y-8">
-        <div className="flex items-center gap-x-2 bg-black-1 py-4 px-6 rounded-lg focus-within:ring focus-within:ring-primary">
+        <div className="flex items-center gap-x-2 bg-black-1 py-4 px-6 rounded-lg focus-within:ring-[1px] focus-within:ring-primary">
           <Icon icon="search" className="text-back text-2xl" />
           <input
             type="text"
