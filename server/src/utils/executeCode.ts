@@ -11,7 +11,7 @@ if (!fs.existsSync(dirOutputs)) {
 
 export const executeCode = async (filePath: string) => {
   const codeId = path.basename(filePath).split(".")[0];
-  const output_filename = `${codeId}.exe`;
+  const output_filename = `${codeId}.out`;
 
   const outputPath = path.join(dirOutputs, output_filename);
 
