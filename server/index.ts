@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import userRoutes from "./src/routes/users.ts";
 import problemRoutes from "./src/routes/problems.ts";
+import compilerRoutes from "./src/routes/compiler.ts";
 import cors from "cors";
 import dotenv from "dotenv";
 
@@ -15,6 +16,7 @@ app.use(cors());
 
 app.use("/auth", userRoutes);
 app.use("/problem", problemRoutes);
+app.use("/compiler", compilerRoutes);
 
 const PORT = Number(process.env.PORT) || 9090;
 

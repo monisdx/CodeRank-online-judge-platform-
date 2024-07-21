@@ -44,7 +44,9 @@ export default function AuthPage() {
       auth
         .login(form.email, form.password)
         .catch((err) =>
-          toast.error({ title: err || "Error : Something bad happened" })
+          toast.error({
+            title: err.message || "Error : Something bad happened",
+          })
         )
         .finally(() => {
           setLoading(false);

@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 # ENV
 .env
+
+codes
+outputs
