@@ -3,10 +3,16 @@ import Icon from "../../../common/Icon";
 import { Problem } from "../../../types";
 import { Link } from "react-router-dom";
 
-export default function ProblemCard({ problem }: { problem: Problem }) {
+interface ProblemCardProps {
+  problem: Problem;
+}
+
+export default function ProblemCard(props: ProblemCardProps) {
+  const { problem } = props;
+
   return (
     <Link
-      to={`/problems/${232423}`}
+      to={`/problems/${problem._id}`}
       role="listitem"
       className="flex bg-black-1 justify-between rounded-lg p-5 border border-black-2 cursor-pointer group"
     >

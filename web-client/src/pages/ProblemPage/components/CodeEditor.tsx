@@ -3,8 +3,11 @@ import { useRef, useState } from "react";
 import Icon from "../../../common/Icon";
 import { twMerge } from "tailwind-merge";
 import { useAuth } from "../../../contexts/authContext";
+import { Problem } from "../../../types";
 
-export default function CodeEditor() {
+export default function CodeEditor(props: { problem: Problem }) {
+  const { problem } = props;
+
   const editorRef = useRef();
   const [code, setCode] = useState<string>(codesnippets["cpp"]);
   const [dropDown, setDropDown] = useState<boolean>(false);
@@ -123,6 +126,7 @@ export default function CodeEditor() {
             <textarea
               rows={3}
               name="output"
+              disabled
               // value={form.inputformat}
               // onChange={handleChange}
               className="w-full bg-black-1 py-4 px-6 text-back rounded-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary"
@@ -132,6 +136,7 @@ export default function CodeEditor() {
             <textarea
               rows={3}
               name="verdict"
+              disabled
               // value={form.inputformat}
               // onChange={handleChange}
               className="w-full bg-black-1 py-4 px-6 text-back rounded-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary"

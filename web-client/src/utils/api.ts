@@ -243,6 +243,16 @@ const api = {
 
       return data.message;
     },
+
+    async getProblemById(id: string) {
+      const response = await client.get<{ problem: Problem }>(`/problem/${id}`);
+
+      const data = response.data;
+
+      checkAndHandleError(data);
+
+      return data;
+    },
   },
 };
 
