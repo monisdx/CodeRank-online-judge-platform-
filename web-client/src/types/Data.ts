@@ -18,3 +18,13 @@ export interface Problem {
   exampleinput: string[];
   exampleoutput: string[];
 }
+
+export interface Testcase {
+  input: string;
+  expectedoutput: string;
+}
+
+export interface Testresult {
+  testcase: number;
+  status: boolean;
+}

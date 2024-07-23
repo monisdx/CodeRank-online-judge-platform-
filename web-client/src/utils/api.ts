@@ -1,7 +1,7 @@
 import axios from "axios";
 import { serverUrl } from "../config";
 import { clearTokenFromLocalStorage } from "./utils";
-import { Problem, User } from "../types";
+import { Problem, Testcase, Testresult, User } from "../types";
 
 let jwt: string | null = null;
 
@@ -246,6 +246,40 @@ const api = {
 
     async getProblemById(id: string) {
       const response = await client.get<{ problem: Problem }>(`/problem/${id}`);
+
+      const data = response.data;
+
+      checkAndHandleError(data);
+
+      return data;
+    },
+  },
+
+  compiler: {
+    async runCode(language: string, code: string, input: string) {
+      const response = await client.post("/compiler/run", {
+        language,
+        code,
+        input,
+      });
+
+      const data = response.data;
+      console.log(data);
+
+      checkAndHandleError(data);
+
+      return data;
+    },
+
+    async submitCode(language: string, code: string, testcases: Testcase[]) {
+      const response = await client.post<{
+        testresults: Testresult[];
+        verdict: string;
+      }>("/compiler/submit", {
+        language,
+        code,
+        testcases,
+      });
 
       const data = response.data;
 

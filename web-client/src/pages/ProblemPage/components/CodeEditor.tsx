@@ -3,7 +3,10 @@ import { useRef, useState } from "react";
 import Icon from "../../../common/Icon";
 import { twMerge } from "tailwind-merge";
 import { useAuth } from "../../../contexts/authContext";
-import { Problem } from "../../../types";
+import { Problem, Testresult } from "../../../types";
+import api from "../../../utils/api";
+import useToast from "../../../hooks/useToast";
+import Loader from "../../../common/Loader";
 
 export default function CodeEditor(props: { problem: Problem }) {
   const { problem } = props;
@@ -11,10 +14,26 @@ export default function CodeEditor(props: { problem: Problem }) {
   const editorRef = useRef();
   const [code, setCode] = useState<string>(codesnippets["cpp"]);
   const [dropDown, setDropDown] = useState<boolean>(false);
-  const [lang, setLang] = useState<string>("cpp");
+  const [lang, setLang] = useState<{ fileName: string; value: string }>({
+    fileName: "cpp",
+    value: "C++",
+  });
+  const [input, setInput] = useState<string>("");
   const [active, setActive] = useState<number>(1);
+  const [output, setOutput] = useState<string>("");
+  const [result, setResult] = useState<{
+    verdict: string;
+    testresults: Testresult[];
+  }>();
+
+  const [loading, setLoading] = useState<{ output: boolean; verdict: boolean }>(
+    { output: false, verdict: false }
+  );
+
+  console.log(result);
 
   const { authenticated } = useAuth();
+  const toast = useToast();
 
   const options = {
     minimap: {
@@ -22,14 +41,36 @@ export default function CodeEditor(props: { problem: Problem }) {
     },
   };
 
-  function onSelect(l: string) {
+  function onSelect(l: { value: string; fileName: string }) {
     setLang(l);
-    setCode(codesnippets[l]);
+    setCode(codesnippets[l.fileName]);
   }
 
   function onMount(editor: any) {
     editorRef.current = editor;
     editor.focus();
+  }
+
+  function runHandler() {
+    setActive(2);
+    setLoading({ ...loading, output: true });
+    api.compiler
+      .runCode(lang.fileName, code, input)
+      .then((res) => setOutput(res.output))
+      .catch((err) => toast.error({ title: err || "Something went wrong" }))
+      .finally(() => {
+        setLoading({ ...loading, output: false });
+      });
+  }
+
+  function submitHandler() {
+    setActive(3);
+    setLoading({ ...loading, verdict: true });
+    api.compiler
+      .submitCode(lang.fileName, code, [{ input: "1 2", expectedoutput: "3" }])
+      .then((res) => setResult(res))
+      .catch((err) => toast.error({ title: err || "Something went wrong" }))
+      .finally(() => setLoading({ ...loading, verdict: false }));
   }
 
   return (
@@ -53,7 +94,7 @@ export default function CodeEditor(props: { problem: Problem }) {
               )}
               onClick={() => setDropDown(!dropDown)}
             >
-              <p className="text-back">{lang}</p>
+              <p className="text-back">{lang.value}</p>
               <Icon
                 icon="expand_more"
                 className={twMerge(
@@ -75,27 +116,27 @@ export default function CodeEditor(props: { problem: Problem }) {
                   key={key}
                   className={twMerge(
                     "px-4 py-2 text-back text-nowrap font-cabin text-sm font-bold w-full text-start capitalize hover:bg-primary",
-                    lang === data && "bg-primary"
+                    lang.fileName === data.fileName && "bg-primary"
                   )}
                   onClick={() => {
                     onSelect(data);
                     setDropDown(!dropDown);
                   }}
                 >
-                  {data}
+                  {data.value}
                 </div>
               ))}
             </div>
           </label>
         </div>
-        <div className="flex items-center justify-center bg-black-3 h-[60vh] w-full">
+        <div className="flex items-center justify-center bg-black-3 min-h-[50vh] w-full">
           <Editor
-            language={lang}
+            language={lang.fileName}
             value={code}
             theme="vs-dark"
             onMount={onMount}
             options={options}
-            className=""
+            onChange={(value) => setCode(value || "")}
           />
         </div>
         <div className="flex flex-col rounded-lg bg-black-3 border border-black-2 p-4 mt-4">
@@ -115,40 +156,76 @@ export default function CodeEditor(props: { problem: Problem }) {
           </nav>
           {active === 1 && (
             <textarea
-              rows={3}
+              rows={4}
               name="input"
-              // value={form.inputformat}
-              // onChange={handleChange}
-              className="w-full bg-black-1 py-4 px-6 text-back rounded-b-lg rounded-tr-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              className="resize-none w-full bg-black-1 py-4 px-6 text-back rounded-b-lg rounded-tr-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary"
             />
           )}
           {active === 2 && (
-            <textarea
-              rows={3}
-              name="output"
-              disabled
-              // value={form.inputformat}
-              // onChange={handleChange}
-              className="w-full bg-black-1 py-4 px-6 text-back rounded-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary"
-            />
+            <>
+              {!loading.output && (
+                <textarea
+                  rows={4}
+                  name="verdict"
+                  disabled
+                  value={output}
+                  className=" resize-none w-full bg-black-1 py-4 px-6 text-back rounded-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary"
+                />
+              )}{" "}
+              {loading.output && (
+                <div className="w-full h-32 flex items-center justify-center bg-black-1 py-4 px-6 text-back rounded-lg font-medium">
+                  <Loader className="w-12" />
+                </div>
+              )}
+            </>
           )}
           {active === 3 && (
-            <textarea
-              rows={3}
-              name="verdict"
-              disabled
-              // value={form.inputformat}
-              // onChange={handleChange}
-              className="w-full bg-black-1 py-4 px-6 text-back rounded-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary"
-            />
+            <div className="w-full h-32 flex justify-center bg-black-1 py-4 px-6 text-back rounded-lg font-medium">
+              {!loading.verdict && (
+                <div className="flex flex-col w-full gap-y-2">
+                  <h3 className="text-green-500 font-inter capitalize text-lg">
+                    {result?.verdict}
+                  </h3>
+                  <div className="flex flex-wrap gap-x-2 w-full">
+                    {result?.testresults.map((testresult, key) => (
+                      <p
+                        className={twMerge(
+                          "px-2 py-1 rounded-lg  bg-opacity-20",
+                          testresult.status
+                            ? "bg-green-500 text-green-500"
+                            : "bg-red-500 text-green-500"
+                        )}
+                      >
+                        test case {testresult.testcase}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {loading.verdict && (
+                <div className="flex items-center justify-center">
+                  <Loader className="w-12" />
+                </div>
+              )}
+            </div>
           )}
         </div>
-        <div className="flex gap-x-4 mt-4">
-          <button className="flex items-center justify-center gap-x-2 rounded-lg px-4 py-2 text-back p-1 border-none outline-none bg-black-3 min-w-[10rem]">
+        <div className="flex gap-x-4 my-4">
+          <button
+            onClick={runHandler}
+            disabled={loading.output}
+            className="flex items-center justify-center gap-x-2 rounded-lg px-4 py-2 text-back p-1 border-none outline-none bg-black-3 hover:bg-black-3/70 min-w-[10rem] disabled:animate-pulse disabled:cursor-not-allowed disabled:opacity-60"
+          >
             <Icon icon="play" className="text-back text-2xl" />
             <p className="text-back font-inter font-medium text-lg">Run</p>
           </button>
-          <button className="flex items-center justify-center gap-x-2 rounded-lg px-4 py-2 text-back p-1 border-none outline-none bg-primary min-w-[10rem]">
+          <button
+            onClick={submitHandler}
+            disabled={loading.verdict}
+            className="flex items-center justify-center gap-x-2 rounded-lg px-4 py-2 text-back p-1 border-none outline-none bg-primary hover:bg-primary/70 min-w-[10rem] disabled:animate-pulse disabled:cursor-not-allowed disabled:opacity-60"
+          >
             <Icon icon="upload" className="text-back text-2xl" />
             <p className="text-back font-inter font-medium text-lg">Submit</p>
           </button>
@@ -158,7 +235,24 @@ export default function CodeEditor(props: { problem: Problem }) {
   );
 }
 
-const language = ["cpp", "python", "java"];
+const language = [
+  {
+    fileName: "cpp",
+    value: "C++",
+  },
+  {
+    fileName: "c",
+    value: "C",
+  },
+  {
+    fileName: "java",
+    value: "Java",
+  },
+  {
+    fileName: "py",
+    value: "Python",
+  },
+];
 
 const codesnippets: Record<string, string> = {
   cpp: `#include <bits/stdc++.h>
@@ -172,7 +266,7 @@ const codesnippets: Record<string, string> = {
 
   }`,
 
-  python: `print('Hello World')`,
+  py: `print('Hello World')`,
 
   java: `public class Main {
     public static void main(String[] args) {
@@ -181,6 +275,14 @@ const codesnippets: Record<string, string> = {
 
     }
   }`,
+
+  c: `#include <stdio.h>
+  int main() {
+
+    printf("Hello, World!");
+    return 0;
+}
+`,
 };
 
 const navlink = [

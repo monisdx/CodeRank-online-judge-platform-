@@ -24,11 +24,11 @@ export default function ProblemPage() {
   const { authenticated } = useAuth();
   const params = useParams();
   console.log(params);
-  if (!params._id) return <Navigate to={"/problems"} />;
+  if (!params.id) return <Navigate to={"/problems"} />;
 
   const { data, loading } = useApiResponse(
     api.problem.getProblemById,
-    params._id
+    params.id
   );
 
   const problem = data?.problem;
@@ -136,7 +136,7 @@ export default function ProblemPage() {
       )}
 
       {loading && (
-        <div className="flex flex-col justify-start items-center mt-[4rem]">
+        <div className="flex h-screen flex-col justify-start items-center mt-[4rem]">
           <Loader className="w-1/5" />
         </div>
       )}
