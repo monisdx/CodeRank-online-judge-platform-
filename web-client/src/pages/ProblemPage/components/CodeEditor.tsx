@@ -23,13 +23,14 @@ export default function CodeEditor(props: { problem: Problem }) {
   const [output, setOutput] = useState<string>("");
   const [result, setResult] = useState<{
     verdict: string;
+    status: boolean;
     testresults: Testresult[];
   }>();
 
   const [loading, setLoading] = useState<{ output: boolean; verdict: boolean }>(
     { output: false, verdict: false }
   );
-
+  console.log(problem);
   console.log(result);
 
   const { authenticated } = useAuth();
@@ -67,7 +68,7 @@ export default function CodeEditor(props: { problem: Problem }) {
     setActive(3);
     setLoading({ ...loading, verdict: true });
     api.compiler
-      .submitCode(lang.fileName, code, [{ input: "1 2", expectedoutput: "3" }])
+      .submitCode(lang.fileName, code, problem.testcases)
       .then((res) => setResult(res))
       .catch((err) => toast.error({ title: err || "Something went wrong" }))
       .finally(() => setLoading({ ...loading, verdict: false }));
@@ -185,7 +186,12 @@ export default function CodeEditor(props: { problem: Problem }) {
             <div className="w-full h-32 flex justify-center bg-black-1 py-4 px-6 text-back rounded-lg font-medium">
               {!loading.verdict && (
                 <div className="flex flex-col w-full gap-y-2">
-                  <h3 className="text-green-500 font-inter capitalize text-lg">
+                  <h3
+                    className={twMerge(
+                      "font-inter capitalize text-lg",
+                      result?.status ? "text-green-500" : "text-red-500"
+                    )}
+                  >
                     {result?.verdict}
                   </h3>
                   <div className="flex flex-wrap gap-x-2 w-full">
@@ -195,7 +201,7 @@ export default function CodeEditor(props: { problem: Problem }) {
                           "px-2 py-1 rounded-lg  bg-opacity-20",
                           testresult.status
                             ? "bg-green-500 text-green-500"
-                            : "bg-red-500 text-green-500"
+                            : "bg-red-500 text-red-500"
                         )}
                       >
                         test case {testresult.testcase}

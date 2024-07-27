@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { generateFile } from "../utils/generateFile";
 import { executeCode } from "../utils/executeCode";
 import { generateInputFile } from "../utils/generateInputFile";
+import { stderr } from "process";
 
 export const runCode = async (req: Request, res: Response) => {
   const { language = "cpp", code, input } = req.body;
@@ -48,13 +49,14 @@ export const submitCode = async (req: Request, res: Response) => {
         return res.status(200).json({
           testresults,
           verdict: `wrong answer on testcase ${index}`,
+          status: false,
         });
       }
 
       index++;
     }
 
-    res.status(200).json({ testresults, verdict: "accepted" });
+    res.status(200).json({ testresults, verdict: "accepted", status: true });
   } catch (err) {
     res.status(500).json(err);
   }

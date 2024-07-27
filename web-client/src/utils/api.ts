@@ -297,6 +297,7 @@ const api = {
       const response = await client.post<{
         testresults: Testresult[];
         verdict: string;
+        status: boolean;
       }>("/compiler/submit", {
         language,
         code,
