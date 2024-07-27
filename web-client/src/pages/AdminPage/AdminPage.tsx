@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Header from "./components/Header";
 import ProblemForm from "./components/ProblemForm";
 import Footer from "../../common/Footer";
@@ -14,10 +14,14 @@ export default function AdminPage() {
     loading,
     data,
     refetch: refetchProblems,
-  } = useApiResponse(api.problem.getAllProblems);
+  } = useApiResponse(api.problem.getAllProblems, {
+    keyword: "",
+    difficulty: "",
+  });
 
   const problems = data?.problemlist;
   const toast = useToast();
+  const Ref = useRef(null);
   const [loadDelete, setLoadDelete] = useState<boolean>(false);
   const [openForm, setOpenForm] = useState<boolean>(false);
   const [problemId, setProblemId] = useState<string>("");
@@ -46,7 +50,7 @@ export default function AdminPage() {
       <Toasts />
       <Header />
       <section className="widescreen:w-3/4 mx-auto p-page py-10 bg-black-3 flex-col justify-center items-center gap-y-8">
-        <div className="flex justify-between items-center">
+        <div ref={Ref} className="flex justify-between items-center">
           <h1 className="font-poppins font-bold text-back text-2xl">
             Problems
           </h1>

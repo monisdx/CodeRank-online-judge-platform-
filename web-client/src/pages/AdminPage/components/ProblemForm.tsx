@@ -1,7 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import Icon from "../../../common/Icon";
-import { generateArray, generateString } from "../../../utils";
+import {
+  generateArray,
+  generateInputsOutputs,
+  generateString,
+  generateTestcases,
+} from "../../../utils";
 import api from "../../../utils/api";
 import useToast from "../../../hooks/useToast";
 import { Problem } from "../../../types";
@@ -21,6 +26,8 @@ export default function ProblemForm(props: {
     outputformat: "",
     exampleinput: "",
     exampleoutput: "",
+    testcaseinputs: "",
+    testcaseoutputs: "",
   });
   const [dropDown, setDropDown] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -28,6 +35,10 @@ export default function ProblemForm(props: {
 
   useEffect(() => {
     if (props.default?._id) {
+      const { inputs, outputs } = generateInputsOutputs(
+        props.default?.testcases
+      );
+
       setForm({
         title: props.default?.title,
         description: props.default?.description,
@@ -37,6 +48,8 @@ export default function ProblemForm(props: {
         outputformat: props.default?.outputformat,
         exampleinput: generateString(props.default?.exampleinput),
         exampleoutput: generateString(props.default?.exampleoutput),
+        testcaseinputs: generateString(inputs),
+        testcaseoutputs: generateString(outputs),
       });
     }
   }, []);
@@ -53,6 +66,18 @@ export default function ProblemForm(props: {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!form.difficulty) {
+      toast.error({ title: "Difficulty is not selected" });
+      return;
+    }
+    const inputs = generateArray(form.testcaseinputs);
+    const outputs = generateArray(form.testcaseoutputs);
+
+    if (!generateTestcases(inputs, outputs)) {
+      toast.error({ title: "Testcases not correct" });
+      return;
+    }
+
     setLoading(true);
 
     const dataform = {
@@ -64,6 +89,7 @@ export default function ProblemForm(props: {
       outputformat: form.outputformat,
       exampleinput: generateArray(form.exampleinput),
       exampleoutput: generateArray(form.exampleoutput),
+      testcases: generateTestcases(inputs, outputs),
     };
 
     if (props.default?._id) {
@@ -77,7 +103,8 @@ export default function ProblemForm(props: {
           dataform.inputformat,
           dataform.outputformat,
           dataform.exampleinput,
-          dataform.exampleoutput
+          dataform.exampleoutput,
+          dataform.testcases
         )
         .then((res) => {
           toast.display({ title: res });
@@ -99,7 +126,8 @@ export default function ProblemForm(props: {
           dataform.inputformat,
           dataform.outputformat,
           dataform.exampleinput,
-          dataform.exampleoutput
+          dataform.exampleoutput,
+          dataform.testcases
         )
         .then((res) => {
           console.log(res);
@@ -144,7 +172,7 @@ export default function ProblemForm(props: {
           <div
             className={twMerge(
               "flex items-center justify-between bg-black-1 py-4 px-6 rounded-lg outline-none font-medium cursor-pointer",
-              dropDown && "border-primary border"
+              dropDown && "ring-primary ring-[1px]"
             )}
             onClick={() => setDropDown(!dropDown)}
           >
@@ -245,6 +273,30 @@ export default function ProblemForm(props: {
             required={true}
             onChange={handleChange}
             placeholder="Enter output for problem"
+            className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary"
+          />
+        </label>
+        <label className="flex flex-col">
+          <span className="text-back font-medium mb-4">Testcase inputs</span>
+          <input
+            type="text"
+            name="testcaseinputs"
+            value={form.testcaseinputs}
+            required={true}
+            onChange={handleChange}
+            placeholder="Enter testcase inputs"
+            className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary"
+          />
+        </label>
+        <label className="flex flex-col">
+          <span className="text-back font-medium mb-4">Testcase outputs</span>
+          <input
+            type="text"
+            name="testcaseoutputs"
+            value={form.testcaseoutputs}
+            required={true}
+            onChange={handleChange}
+            placeholder="Enter testcase outputs"
             className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary"
           />
         </label>

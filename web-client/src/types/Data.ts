@@ -17,6 +17,7 @@ export interface Problem {
   constraints: string[];
   exampleinput: string[];
   exampleoutput: string[];
+  testcases: Testcase[];
 }
 
 export interface Testcase {
@@ -27,4 +28,9 @@ export interface Testcase {
 export interface Testresult {
   testcase: number;
   status: boolean;
+}
+
+export interface Filter {
+  keyword?: string;
+  difficulty?: string;
 }

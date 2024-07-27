@@ -25,6 +25,6 @@ dist-ssr
 # ENV
 .env
 
+input
 codes
 outputs
-inputs

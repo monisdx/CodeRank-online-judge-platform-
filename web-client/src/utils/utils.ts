@@ -1,6 +1,32 @@
 import { AxiosResponse } from "axios";
-import { UnionToTuple } from "../types";
+import { Testcase, UnionToTuple } from "../types";
 
+export function deepEqual<T>(obj1: T, obj2: T): boolean {
+  return JSON.stringify(obj1) === JSON.stringify(obj2);
+}
+
+export function generateTestcases(inputs: string[], outputs: string[]) {
+  if (inputs.length !== outputs.length) {
+    return false;
+  }
+
+  return inputs.map((input, index) => ({
+    input,
+    expectedoutput: outputs[index],
+  }));
+}
+
+export function generateInputsOutputs(testcases: Testcase[]) {
+  const inputs: string[] = [];
+  const outputs: string[] = [];
+
+  testcases.forEach((testcase) => {
+    inputs.push(testcase.input);
+    outputs.push(testcase.expectedoutput);
+  });
+
+  return { inputs, outputs };
+}
 export function generateArray(str: string): string[] {
   return str.split(",").map((s) => s.trim());
 }

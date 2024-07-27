@@ -1,7 +1,7 @@
 import axios from "axios";
 import { serverUrl } from "../config";
 import { clearTokenFromLocalStorage } from "./utils";
-import { Problem, Testcase, Testresult, User } from "../types";
+import { Filter, Problem, Testcase, Testresult, User } from "../types";
 
 let jwt: string | null = null;
 
@@ -165,8 +165,13 @@ const api = {
     },
   },
   problem: {
-    async getAllProblems() {
-      const response = await client.get<{ problemlist: Problem[] }>("/problem");
+    async getAllProblems(config: Filter) {
+      const response = await client.get<{ problemlist: Problem[] }>(
+        "/problem",
+        {
+          params: config,
+        }
+      );
 
       const data = response.data;
 
@@ -183,7 +188,8 @@ const api = {
       inputformat: string,
       outputformat: string,
       exampleinput: string[],
-      exampleoutput: string[]
+      exampleoutput: string[],
+      testcases: Testcase[] | boolean
     ) {
       const response = await client.post<{ message: string }>("/problem", {
         title,
@@ -194,6 +200,7 @@ const api = {
         outputformat,
         exampleinput,
         exampleoutput,
+        testcases,
       });
 
       const data = response.data;
@@ -212,7 +219,8 @@ const api = {
       inputformat: string,
       outputformat: string,
       exampleinput: string[],
-      exampleoutput: string[]
+      exampleoutput: string[],
+      testcases: Testcase[] | boolean
     ) {
       const response = await client.put<{ message: string }>(`/problem/${id}`, {
         title,
@@ -223,6 +231,7 @@ const api = {
         outputformat,
         exampleinput,
         exampleoutput,
+        testcases,
       });
 
       const data = response.data;
@@ -246,6 +255,19 @@ const api = {
 
     async getProblemById(id: string) {
       const response = await client.get<{ problem: Problem }>(`/problem/${id}`);
+
+      const data = response.data;
+
+      checkAndHandleError(data);
+
+      return data;
+    },
+
+    async getProblem(config: Filter) {
+      console.log(config);
+      const response = await client.get("/problem/search", {
+        params: { keyword: "two", difficulty: "Easy" },
+      });
 
       const data = response.data;
 

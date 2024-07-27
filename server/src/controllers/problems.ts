@@ -3,10 +3,48 @@ import mongoose from "mongoose";
 import { Request, Response } from "express";
 
 export const getProblems = async (req: Request, res: Response) => {
+  const { keyword, difficulty } = req.query;
+
   try {
-    const problems = await Problem.find();
+    let query = {};
+
+    if (keyword && difficulty) {
+      const title = new RegExp(keyword as string, "i");
+      query = { $and: [{ title }, { difficulty }] };
+    } else if (keyword) {
+      const title = new RegExp(keyword as string, "i");
+      query = { title };
+    } else if (difficulty) {
+      query = { difficulty };
+    }
+
+    const problems = await Problem.find(query);
 
     res.status(200).json({ problemlist: problems });
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
+};
+
+export const getProblemsbysearch = async (req: Request, res: Response) => {
+  const { keyword, difficulty } = req.body;
+
+  try {
+    let query = {};
+
+    if (keyword && difficulty) {
+      const title = new RegExp(keyword, "i");
+      query = { $and: [{ title }, { difficulty }] };
+    } else if (keyword) {
+      const title = new RegExp(keyword, "i");
+      query = { title };
+    } else if (difficulty) {
+      query = { difficulty };
+    }
+
+    const problems = await Problem.find(query);
+
+    res.status(200).json({ problems });
   } catch (error) {
     res.status(500).json({ message: error });
   }
