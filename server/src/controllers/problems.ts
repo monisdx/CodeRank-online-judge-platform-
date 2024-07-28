@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 
 export const getProblems = async (req: Request, res: Response) => {
   const { keyword, difficulty } = req.query;
-
+   
   try {
     let query = {};
 

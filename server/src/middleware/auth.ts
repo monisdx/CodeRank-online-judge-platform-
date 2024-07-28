@@ -15,7 +15,7 @@ declare global {
 const auth = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
-    console.log(token);
+
     let decodeData;
 
     if (token) {
@@ -23,7 +23,7 @@ const auth = async (req: Request, res: Response, next: NextFunction) => {
         email: string;
         id: string;
       };
-      console.log(decodeData);
+
       req.userId = decodeData?.id;
     }
 

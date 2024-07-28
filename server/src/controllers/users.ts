@@ -103,3 +103,15 @@ export const googleoauth = async (req: Request, res: Response) => {
     res.status(500).json({ message: "something went wrong" });
   }
 };
+
+export const getUserInfo = async (req: Request, res: Response) => {
+  try {
+    if (!req.userId) return res.status(401).json({ message: "Unauthorized" });
+
+    const user = await User.findById(req.userId);
+
+    res.status(200).json({ user });
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
+};
