@@ -2,8 +2,9 @@ import mongoose from "mongoose";
 
 const SubmissionSchema = new mongoose.Schema({
   user_id: String,
-  problem_id: [{ type: mongoose.Schema.Types.ObjectId, ref: "Problem" }],
+  problem_id: { type: mongoose.Schema.Types.ObjectId, ref: "Problem" },
   status: Boolean,
+  message: String,
   language: String,
   createdAt: {
     type: Date,

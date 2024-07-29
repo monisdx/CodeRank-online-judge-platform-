@@ -36,12 +36,12 @@ export function AuthContextProvider(props: { children: React.ReactNode }) {
   const refreshComponent = useRefreshComponent();
   const toast = useToast();
 
-  // async function fetchUser() {
-  //   if (authenticated) {
-  //     const userResponse = await api.user.getCurrentUser();
-  //     if (userResponse) setUser(userResponse.user);
-  //   }
-  // }
+  async function fetchUser() {
+    if (authenticated) {
+      const userResponse = await api.user.getCurrentUser();
+      if (userResponse) setUser(userResponse.user);
+    }
+  }
 
   async function login(email: string, password: string) {
     const success = await api.auth
@@ -53,11 +53,6 @@ export function AuthContextProvider(props: { children: React.ReactNode }) {
       saveTokenToLocalStorage(success.token);
     }
     temporaryAccessToken.current = success.token;
-    console.log(success);
-    if (success.result) {
-      setUser(success.result);
-    }
-    // localStorage.removeItem("mixr-lastOTPtimer");
 
     setAuthenticated(true);
     setTimeout(() => {
@@ -81,9 +76,6 @@ export function AuthContextProvider(props: { children: React.ReactNode }) {
     if (success.token) {
       saveTokenToLocalStorage(success.token);
     }
-    if (success.result) {
-      setUser(success.result);
-    }
 
     setAuthenticated(true);
     setTimeout(() => {
@@ -98,7 +90,6 @@ export function AuthContextProvider(props: { children: React.ReactNode }) {
     if (!success) return;
 
     saveTokenToLocalStorage(success.token);
-    setUser(success.result);
     // localStorage.removeItem("mixr-la
 
     setAuthenticated(true);
@@ -106,50 +97,6 @@ export function AuthContextProvider(props: { children: React.ReactNode }) {
       refreshComponent.byId("page");
     }, 10);
   }
-
-  // const otp = {
-  //   request() {
-  //     if (OTPsentAt.current + otpRequestTimeout < Date.now()) {
-  //       const prevTimer = OTPsentAt.current;
-  //       localStorage.setItem("mixr-lastOTPtimer", Date.now().toString());
-  //       OTPsentAt.current = Date.now();
-  //       api.auth
-  //         .generateVerificationCode()
-  //         .then((res) => {
-  //           res
-  //             ? toast.display({ title: res })
-  //             : toast.error({ title: "Unkown Error while sending email" });
-  //         })
-  //         .catch((err) => {
-  //           toast.error(err);
-  //           OTPsentAt.current = prevTimer;
-  //           localStorage.setItem("mixr-lastOTPtimer", prevTimer.toString());
-  //         });
-  //     }
-  //   },
-
-  //   getWaitTime() {
-  //     return Math.max(OTPsentAt.current + otpRequestTimeout - Date.now(), 0);
-  //   },
-
-  //   verify(code: string) {
-  //     api.auth
-  //       .verify(code)
-  //       .then((res) => {
-  //         res
-  //           ? toast.display({ title: "Successfully verified" })
-  //           : toast.error({ title: "Unkown Error while verifying OTP" });
-
-  //         if (res) {
-  //           temporaryAccessToken.current &&
-  //             saveTokenToLocalStorage(temporaryAccessToken.current);
-  //           fetchUser();
-  //           setVerified(true);
-  //         }
-  //       })
-  //       .catch((err) => toast.error(err));
-  //   },
-  // };
 
   useEffect(() => {
     if (!flag.current) {
@@ -170,6 +117,10 @@ export function AuthContextProvider(props: { children: React.ReactNode }) {
       }, 10);
     }
   }, []);
+
+  useEffect(() => {
+    fetchUser();
+  }, [authenticated]);
 
   const value: AuthContextType = {
     login,

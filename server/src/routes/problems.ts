@@ -5,16 +5,15 @@ import {
   getProblems,
   updateProblem,
   deleteProblem,
-  getProblemsbysearch,
 } from "../controllers/problems";
+import auth from "../middleware/auth";
 
 const router = express.Router();
 
-router.post("/", createProblem);
+router.post("/", auth, createProblem);
 router.get("/", getProblems);
-router.get("/search", getProblemsbysearch);
 router.get("/:id", getProblem);
-router.put("/:id", updateProblem);
-router.delete("/:id", deleteProblem);
+router.put("/:id", auth, updateProblem);
+router.delete("/:id", auth, deleteProblem);
 
 export default router;

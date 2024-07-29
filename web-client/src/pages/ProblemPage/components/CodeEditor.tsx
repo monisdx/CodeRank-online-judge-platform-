@@ -30,8 +30,6 @@ export default function CodeEditor(props: { problem: Problem }) {
   const [loading, setLoading] = useState<{ output: boolean; verdict: boolean }>(
     { output: false, verdict: false }
   );
-  console.log(problem);
-  console.log(result);
 
   const { authenticated } = useAuth();
   const toast = useToast();
@@ -68,7 +66,7 @@ export default function CodeEditor(props: { problem: Problem }) {
     setActive(3);
     setLoading({ ...loading, verdict: true });
     api.compiler
-      .submitCode(lang.fileName, code, problem.testcases)
+      .submitCode(lang.fileName, code, problem.testcases, problem?._id)
       .then((res) => setResult(res))
       .catch((err) => toast.error({ title: err || "Something went wrong" }))
       .finally(() => setLoading({ ...loading, verdict: false }));

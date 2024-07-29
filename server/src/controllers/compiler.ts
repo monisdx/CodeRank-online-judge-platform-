@@ -7,6 +7,7 @@ import {
   executePython,
 } from "../utils/executeCode";
 import { generateInputFile } from "../utils/generateInputFile";
+import Submission from "../models/submission";
 
 export const runCode = async (req: Request, res: Response) => {
   const { language = "cpp", code, input } = req.body;
@@ -18,32 +19,40 @@ export const runCode = async (req: Request, res: Response) => {
     const filePath = await generateFile(language, code);
     const input_filePath = await generateInputFile(input);
     let output;
-
-    if (language === "cpp") {
-      output = await executeCpp(filePath, input_filePath);
-    } else if (language === "c") {
-      output = await executeC(filePath, input_filePath);
-    } else if (language === "py") {
-      output = await executePython(filePath, input_filePath);
-    } else if (language === "java") {
-      output = await executeJava(filePath, input_filePath);
-    } else {
-      return res
-        .status(500)
-        .json({ success: false, message: "This Language is not supported" });
+    try {
+      if (language === "cpp") {
+        output = await executeCpp(filePath, input_filePath);
+      } else if (language === "c") {
+        output = await executeC(filePath, input_filePath);
+      } else if (language === "py") {
+        output = await executePython(filePath, input_filePath);
+      } else if (language === "java") {
+        output = await executeJava(filePath, input_filePath);
+      } else {
+        return res
+          .status(500)
+          .json({ success: false, message: "This Language is not supported" });
+      }
+      console.log(output);
+      res.status(200).json({ output });
+    } catch (err) {
+      res.status(402).json({ message: (err as any).stderr });
     }
-
-    res.status(200).json({ output });
-  } catch (err: any) {
-    res.status(500).json({ message: err.stserr || "something went wrong" });
+  } catch (err) {
+    res.status(500).json({ message: err });
   }
 };
 
 export const submitCode = async (req: Request, res: Response) => {
-  const { language = "cpp", code, testcases } = req.body;
+  const { language = "cpp", code, testcases, problem_id } = req.body;
 
   if (!code)
     return res.status(500).json({ success: false, message: "Code is empty" });
+
+  if (!problem_id)
+    return res
+      .status(500)
+      .json({ success: false, message: "Problem id is not found" });
 
   try {
     const filePath = await generateFile(language, code);
@@ -53,6 +62,7 @@ export const submitCode = async (req: Request, res: Response) => {
     for (const { input, expectedoutput } of testcases) {
       const input_filePath = await generateInputFile(input);
       let output;
+
       const start = performance.now();
       if (language === "cpp") {
         output = await executeCpp(filePath, input_filePath);
@@ -81,6 +91,14 @@ export const submitCode = async (req: Request, res: Response) => {
       testresults.push(testresult);
 
       if (!iscorrect) {
+        await Submission.create({
+          user_id: req.userId,
+          problem_id,
+          status: false,
+          message: "wrong answer",
+          language,
+          createdAt: new Date().toISOString(),
+        });
         return res.status(200).json({
           testresults,
           verdict: `wrong answer on testcase ${index}`,
@@ -90,7 +108,14 @@ export const submitCode = async (req: Request, res: Response) => {
 
       index++;
     }
-
+    await Submission.create({
+      user_id: req.userId,
+      problem_id,
+      status: true,
+      message: "accepted",
+      language,
+      createdAt: new Date().toISOString(),
+    });
     res.status(200).json({ testresults, verdict: "accepted", status: true });
   } catch (err) {
     res.status(500).json(err);

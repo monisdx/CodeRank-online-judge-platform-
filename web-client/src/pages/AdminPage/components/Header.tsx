@@ -1,6 +1,7 @@
 import React from "react";
 import api from "../../../utils/api";
 import { Link, useNavigate } from "react-router-dom";
+import Icon from "../../../common/Icon";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -13,16 +14,16 @@ export default function Header() {
           admin
         </p>
       </Link>
-      <div className="flex items-center justify-center bg-back p-[0.1rem] rounded-3xl">
-        <button
-          onClick={() => {
-            api.auth.logout().finally(() => navigate("/"));
-          }}
-          className="flex px-5 py-2 font-medium font-cabin text-md rounded-3xl text-black-8 bg-back outline-none border-4 border-black-8"
-        >
-          Log Out
-        </button>
-      </div>
+
+      <button
+        onClick={() => {
+          api.auth.logout();
+        }}
+        className="flex px-5 py-2 items-center gap-x-2 bg-primary text-back  rounded-xl font-cabin font-medium"
+      >
+        <Icon className="text-2xl" icon="logout" />
+        Log Out
+      </button>
     </nav>
   );
 }

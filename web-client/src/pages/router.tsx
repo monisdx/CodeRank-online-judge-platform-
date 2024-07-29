@@ -13,6 +13,7 @@ import AuthPage from "./AuthPage/AuthPage";
 import RefreshBoundary from "../common/RefreshBoundary";
 import ProtectedRoute, { ProtectedTypes } from "../common/ProtectedRoute";
 import AdminPage from "./AdminPage/AdminPage";
+import SubmissionPage from "./SubmissionPage/SubmissionPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,10 +29,16 @@ const router = createBrowserRouter(
           >
             <Route path="auth" element={<AuthPage />} />
           </Route>
+          <Route
+            path="/"
+            element={<ProtectedRoute type={ProtectedTypes.PRIVATEONLY} />}
+          >
+            <Route path="submission" element={<SubmissionPage />} />
+          </Route>
         </Route>
         <Route
           path="/"
-          element={<ProtectedRoute type={ProtectedTypes.PRIVATEONLY} />}
+          element={<ProtectedRoute type={ProtectedTypes.ADMINONLY} />}
         >
           <Route path="admin">
             <Route index element={<AdminPage />} />

@@ -34,3 +34,13 @@ export interface Filter {
   keyword?: string;
   difficulty?: string;
 }
+
+export interface Submission {
+  _id: string;
+  user_id: string;
+  problem_id: Problem;
+  language: string;
+  message: string;
+  status: boolean;
+  createdAt: Date;
+}

@@ -1,7 +1,14 @@
 import axios from "axios";
 import { serverUrl } from "../config";
 import { clearTokenFromLocalStorage } from "./utils";
-import { Filter, Problem, Testcase, Testresult, User } from "../types";
+import {
+  Filter,
+  Problem,
+  Submission,
+  Testcase,
+  Testresult,
+  User,
+} from "../types";
 
 let jwt: string | null = null;
 
@@ -42,7 +49,7 @@ function createApi() {
           res?.data?.message == "Invalid or expired token") &&
         jwt != null
       ) {
-        // api.auth.logout();
+        api.auth.logout();
       }
 
       const errMsg = JSON.stringify(
@@ -279,6 +286,8 @@ const api = {
 
   compiler: {
     async runCode(language: string, code: string, input: string) {
+      ensureToken();
+
       const response = await client.post("/compiler/run", {
         language,
         code,
@@ -293,7 +302,14 @@ const api = {
       return data;
     },
 
-    async submitCode(language: string, code: string, testcases: Testcase[]) {
+    async submitCode(
+      language: string,
+      code: string,
+      testcases: Testcase[],
+      problem_id: string
+    ) {
+      ensureToken();
+
       const response = await client.post<{
         testresults: Testresult[];
         verdict: string;
@@ -302,7 +318,38 @@ const api = {
         language,
         code,
         testcases,
+        problem_id,
       });
+
+      const data = response.data;
+
+      checkAndHandleError(data);
+
+      return data;
+    },
+  },
+
+  user: {
+    async getCurrentUser() {
+      ensureToken();
+
+      const response = await client.get<{ user: User }>("/auth");
+
+      const data = response.data;
+
+      checkAndHandleError(data);
+
+      return data;
+    },
+  },
+
+  submission: {
+    async getMySubmission() {
+      ensureToken();
+
+      const response = await client.get<{ submissionLists: Submission[] }>(
+        "/submission"
+      );
 
       const data = response.data;
 

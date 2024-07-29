@@ -1,6 +1,7 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/authContext";
 import useQueryParams from "../hooks/useQueryParams";
+import Loader from "./Loader";
 
 export enum ProtectedTypes {
   PRIVATEONLY,
@@ -57,7 +58,7 @@ export default function ProtectedRoute(props: ProtectedRouteProps) {
       <>
         {!loading && (
           <>
-            {authenticated && user && user.isadmin ? (
+            {authenticated && user?.isadmin ? (
               <Outlet />
             ) : (
               <Navigate to={`/auth?redirectUrl=${pathname}`} />

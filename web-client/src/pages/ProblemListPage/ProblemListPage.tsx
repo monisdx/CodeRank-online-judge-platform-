@@ -143,9 +143,9 @@ export default function ProblemListPage() {
             </label>
             <button
               onClick={() => navigate({ pathname: "/problems", search: "" })}
-              className="flex items-center justify-between bg-black-1 py-3 px-4 rounded-lg outline-none font-medium cursor-pointer"
+              className="flex items-center justify-between bg-primary px-4 py-3 rounded-lg outline-none font-medium cursor-pointer"
             >
-              <Icon icon="filter_off" className="text-back text-2xl" />
+              <Icon icon="filter_off" className="text-back text-xl" />
               <p className="text-back text-nowrap text-sm">Clear Filters</p>
             </button>
           </div>
