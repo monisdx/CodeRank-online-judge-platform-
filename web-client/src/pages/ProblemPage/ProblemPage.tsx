@@ -136,7 +136,7 @@ export default function ProblemPage() {
       )}
 
       {loading && (
-        <div className="flex h-screen flex-col justify-start items-center mt-[4rem]">
+        <div className="flex w-full h-screen flex-col justify-center items-center">
           <Loader className="w-1/5" />
         </div>
       )}

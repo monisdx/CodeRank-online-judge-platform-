@@ -115,3 +115,15 @@ export const getUserInfo = async (req: Request, res: Response) => {
     res.status(500).json({ message: error });
   }
 };
+
+export const getLeaderBoardUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await User.find()
+      .sort({ "problems.length": -1, name: 1 })
+      .limit(5);
+
+    res.status(200).json({ usersList: users });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};

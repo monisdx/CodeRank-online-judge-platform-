@@ -38,21 +38,21 @@ export default function ProblemListPage() {
 
   const initaialrender = useRef(true);
 
-  useEffect(() => {
-    if (initaialrender.current) {
-      initaialrender.current = false;
-      return;
-    }
-    refetchProblems();
-  }, [config]);
+  // useEffect(() => {
+  //   if (initaialrender.current) {
+  //     initaialrender.current = false;
+  //     return;
+  //   }
+  //   refetchProblems();
+  // }, [config]);
 
-  useEffect(() => {
-    const newconfig = searchParamsToObject(queryParams);
+  // useEffect(() => {
+  //   const newconfig = searchParamsToObject(queryParams);
 
-    if (!deepEqual(config, newconfig)) {
-      setConfig(newconfig);
-    }
-  }, [location.search]);
+  //   if (!deepEqual(config, newconfig)) {
+  //     setConfig(newconfig);
+  //   }
+  // }, [location.search]);
 
   function handlePressKey(e: any) {
     if (e.keyCode === 13) {

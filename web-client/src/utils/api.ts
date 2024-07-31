@@ -43,6 +43,7 @@ function createApi() {
     },
 
     function (error) {
+      console.log(error);
       const res = error?.response || error;
       if (
         (res?.data?.message == "invalid token" ||
@@ -59,6 +60,8 @@ function createApi() {
           error ||
           `"unknown error happened"`
       );
+
+      // console.log(errMsg);
 
       return Promise.reject(errMsg.slice(1, -1));
     }
@@ -107,7 +110,7 @@ const api = {
         "/auth/signin",
         { email, password }
       );
-
+      console.log(response);
       const userData = response.data;
 
       checkAndHandleError(userData);
@@ -334,6 +337,18 @@ const api = {
       ensureToken();
 
       const response = await client.get<{ user: User }>("/auth");
+
+      const data = response.data;
+
+      checkAndHandleError(data);
+
+      return data;
+    },
+
+    async getLeaderBoardUsers() {
+      const response = await client.get<{ usersList: User[] }>(
+        "/auth/leaderboard"
+      );
 
       const data = response.data;
 

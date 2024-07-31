@@ -5,6 +5,7 @@ export interface User {
   password?: string;
   isadmin: boolean;
   picture?: string;
+  problems: string[];
 }
 
 export interface Problem {

@@ -8,6 +8,7 @@ import {
 } from "../utils/executeCode";
 import { generateInputFile } from "../utils/generateInputFile";
 import Submission from "../models/submission";
+import User from "../models/user";
 
 export const runCode = async (req: Request, res: Response) => {
   const { language = "cpp", code, input } = req.body;
@@ -108,6 +109,7 @@ export const submitCode = async (req: Request, res: Response) => {
 
       index++;
     }
+    //save submission
     await Submission.create({
       user_id: req.userId,
       problem_id,
@@ -116,6 +118,19 @@ export const submitCode = async (req: Request, res: Response) => {
       language,
       createdAt: new Date().toISOString(),
     });
+    //save data for leaderboard
+    const user = await User.findById(req.userId);
+
+    if (user) {
+      const index = user.problems.findIndex((id) => id === String(problem_id));
+      if (index === -1) {
+        user?.problems.push(problem_id);
+        await user?.save();
+      }
+    } else {
+      res.status(500).json({ success: false, message: "User not exist" });
+    }
+
     res.status(200).json({ testresults, verdict: "accepted", status: true });
   } catch (err) {
     res.status(500).json(err);

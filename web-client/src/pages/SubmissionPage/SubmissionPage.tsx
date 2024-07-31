@@ -4,6 +4,7 @@ import useApiResponse from "../../hooks/useApiResponse";
 import api from "../../utils/api";
 import Loader from "../../common/Loader";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 export default function SubmissionPage() {
   const { loading, data } = useApiResponse(api.submission.getMySubmission);
@@ -17,7 +18,7 @@ export default function SubmissionPage() {
       </h1>
       {!loading &&
         (mySubmissions && mySubmissions.length > 0 ? (
-          <div className="flex w-full overflow-x-auto scrollbar-primary">
+          <div className="flex w-full overflow-x-auto scrollbar-primary rounded-lg">
             <table className="flex w-full flex-col min-w-[50rem]">
               <thead className="font-cabin text-lg font-medium text-back bg-primary">
                 <tr className="flex">
@@ -35,7 +36,9 @@ export default function SubmissionPage() {
                     key={key}
                     className="flex border-b-2 border-b-black-2 py-1"
                   >
-                    <td className="basis-[30%] p-2">{123}</td>
+                    <td className="basis-[30%] p-2">
+                      {moment(sub.createdAt).fromNow()}
+                    </td>
                     <td className="basis-[40%] p-2">
                       <Link
                         to={`/problems/${sub.problem_id._id}`}
@@ -75,39 +78,6 @@ export default function SubmissionPage() {
     </section>
   );
 }
-
-const submission = [
-  {
-    time: "1 hour ago",
-    title: "two sum",
-    status: true,
-    language: "cpp",
-  },
-  {
-    time: "1 hour ago",
-    title: "Delete the Middle Node of a Linked List",
-    status: false,
-    language: "cpp",
-  },
-  {
-    time: "1 hour ago",
-    title: "Linked List Cycle II",
-    status: true,
-    language: "java",
-  },
-  {
-    time: "1 hour ago",
-    title: "Remove Nth Node From End of List",
-    status: true,
-    language: "pyhton",
-  },
-  {
-    time: "1 hour ago",
-    title: "Reverse Linked List",
-    status: false,
-    language: "c",
-  },
-];
 
 const idToLang: Record<string, string> = {
   cpp: "c++",
