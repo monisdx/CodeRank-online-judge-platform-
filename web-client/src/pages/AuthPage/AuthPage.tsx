@@ -12,6 +12,7 @@ export default function AuthPage() {
   const toast = useToast();
   const navigate = useNavigate();
   const auth = useAuth();
+  const [error, setError] = useState(null);
 
   console.log(auth);
   console.log(auth.user);
@@ -33,25 +34,13 @@ export default function AuthPage() {
     if (isSignUp) {
       auth
         .register(form.name, form.email, form.password, form.confirmpassword)
-        .catch((err) =>
-          toast.error({ title: err || "Error : Something bad happened" })
-        )
         .finally(() => {
           setLoading(false);
-          navigate("/");
         });
     } else {
-      auth
-        .login(form.email, form.password)
-        .catch((err) =>
-          toast.error({
-            title: err.message || "Error : Something bad happened",
-          })
-        )
-        .finally(() => {
-          setLoading(false);
-          navigate("/");
-        });
+      auth.login(form.email, form.password).finally(() => {
+        setLoading(false);
+      });
     }
   }
 

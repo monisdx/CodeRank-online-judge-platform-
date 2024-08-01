@@ -52,18 +52,20 @@ function createApi() {
       ) {
         api.auth.logout();
       }
+      let isCompilerError = false;
 
-      const errMsg = JSON.stringify(
-        error?.response?.data?.error ||
-          error?.response?.data?.errors?.at(0)?.error ||
-          error?.message ||
-          error ||
-          `"unknown error happened"`
-      );
+      if (res?.data?.stderr) {
+        isCompilerError = true;
+      }
 
-      // console.log(errMsg);
-
-      return Promise.reject(errMsg.slice(1, -1));
+      const errMsg =
+        error?.response?.data?.stderr ||
+        error?.response?.data?.message ||
+        error?.response?.data?.errors?.at(0)?.error ||
+        error?.message ||
+        error ||
+        `"unknown error happened"`;
+      return Promise.reject({ errMsg, isCompilerError });
     }
   );
 

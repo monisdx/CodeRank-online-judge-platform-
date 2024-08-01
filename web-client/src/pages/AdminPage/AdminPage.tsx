@@ -38,7 +38,7 @@ export default function AdminPage() {
       .removeProblem(id)
       .then((res) => toast.display({ title: res }))
       .catch((err) =>
-        toast.error({ title: err || "Error : Something bad happened" })
+        toast.error({ title: err.errMsg || "Error : Something bad happened" })
       )
       .finally(() => {
         setLoadDelete(false);

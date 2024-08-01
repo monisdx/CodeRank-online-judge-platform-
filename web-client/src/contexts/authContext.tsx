@@ -46,7 +46,9 @@ export function AuthContextProvider(props: { children: React.ReactNode }) {
   async function login(email: string, password: string) {
     const success = await api.auth
       .login(email, password)
-      .catch((err) => toast.error({ title: err || "something went wrong" }));
+      .catch((err) =>
+        toast.error({ title: err.errMsg || "something went wrong" })
+      );
     if (!success) return;
 
     if (success.token) {
@@ -68,7 +70,9 @@ export function AuthContextProvider(props: { children: React.ReactNode }) {
   ) {
     const success = await api.auth
       .register(name, email, password, confirmpassword)
-      .catch((err) => toast.error({ title: err || "something went wrong" }));
+      .catch((err) =>
+        toast.error({ title: err.errMsg || "something went wrong" })
+      );
     if (!success) return;
 
     temporaryAccessToken.current = success.token;
@@ -86,7 +90,9 @@ export function AuthContextProvider(props: { children: React.ReactNode }) {
   async function signInWithGoogle(code: string) {
     const success = await api.auth
       .loginWithGoogle(code)
-      .catch((err) => toast.error({ title: err || "something went wrong" }));
+      .catch((err) =>
+        toast.error({ title: err.Msg || "something went wrong" })
+      );
     if (!success) return;
 
     saveTokenToLocalStorage(success.token);

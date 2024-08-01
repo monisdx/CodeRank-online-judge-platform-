@@ -34,10 +34,10 @@ export const runCode = async (req: Request, res: Response) => {
           .status(500)
           .json({ success: false, message: "This Language is not supported" });
       }
-      console.log(output);
+
       res.status(200).json({ output });
     } catch (err) {
-      res.status(402).json({ message: (err as any).stderr });
+      res.status(402).json({ stderr: (err as any).stderr });
     }
   } catch (err) {
     res.status(500).json({ message: err });
@@ -55,6 +55,13 @@ export const submitCode = async (req: Request, res: Response) => {
       .status(500)
       .json({ success: false, message: "Problem id is not found" });
 
+  if (!["cpp", "c", "py", "java"].includes(language)) {
+    return res.status(500).json({
+      success: false,
+      message: "This Language is not supported",
+    });
+  }
+
   try {
     const filePath = await generateFile(language, code);
     let index = 1;
@@ -63,52 +70,45 @@ export const submitCode = async (req: Request, res: Response) => {
     for (const { input, expectedoutput } of testcases) {
       const input_filePath = await generateInputFile(input);
       let output;
+      try {
+        if (language === "cpp") {
+          output = await executeCpp(filePath, input_filePath);
+        } else if (language === "c") {
+          output = await executeC(filePath, input_filePath);
+        } else if (language === "py") {
+          output = await executePython(filePath, input_filePath);
+        } else if (language === "java") {
+          output = await executeJava(filePath, input_filePath);
+        }
 
-      const start = performance.now();
-      if (language === "cpp") {
-        output = await executeCpp(filePath, input_filePath);
-      } else if (language === "c") {
-        output = await executeC(filePath, input_filePath);
-      } else if (language === "py") {
-        output = await executePython(filePath, input_filePath);
-      } else if (language === "java") {
-        output = await executeJava(filePath, input_filePath);
-      } else {
-        return res
-          .status(500)
-          .json({ success: false, message: "This Language is not supported" });
+        // console.log(`${end - start} ms ${index}`);
+
+        const iscorrect: boolean = output === expectedoutput;
+
+        testresults.push({ testcase: index, status: iscorrect });
+
+        if (!iscorrect) {
+          await Submission.create({
+            user_id: req.userId,
+            problem_id,
+            status: false,
+            message: "wrong answer",
+            language,
+            createdAt: new Date().toISOString(),
+          });
+          return res.status(200).json({
+            testresults,
+            verdict: `wrong answer on testcase ${index}`,
+            status: false,
+          });
+        }
+
+        index++;
+      } catch (err) {
+        return res.status(402).json({ stderr: (err as any).stderr });
       }
-      const end = performance.now();
-
-      // console.log(`${end - start} ms ${index}`);
-
-      const iscorrect: boolean = output === expectedoutput;
-
-      const testresult = {
-        testcase: index,
-        status: iscorrect ? true : false,
-      };
-
-      testresults.push(testresult);
-
-      if (!iscorrect) {
-        await Submission.create({
-          user_id: req.userId,
-          problem_id,
-          status: false,
-          message: "wrong answer",
-          language,
-          createdAt: new Date().toISOString(),
-        });
-        return res.status(200).json({
-          testresults,
-          verdict: `wrong answer on testcase ${index}`,
-          status: false,
-        });
-      }
-
-      index++;
     }
+
     //save submission
     await Submission.create({
       user_id: req.userId,
@@ -133,6 +133,6 @@ export const submitCode = async (req: Request, res: Response) => {
 
     res.status(200).json({ testresults, verdict: "accepted", status: true });
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({ message: err });
   }
 };

@@ -19,11 +19,11 @@ export const executeCpp = async (filePath: string, inputPath: string) => {
       (error, stdout, stderr) => {
         if (error) {
           reject({ error, stderr });
-        }
-        if (stderr) {
+        } else if (stderr) {
           reject(stderr);
+        } else {
+          resolve(stdout);
         }
-        resolve(stdout);
       }
     );
   });

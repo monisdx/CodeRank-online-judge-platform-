@@ -110,7 +110,7 @@ export default function ProblemForm(props: {
           toast.display({ title: res });
         })
         .catch((err) =>
-          toast.error({ title: err || "Error : Something bad happened" })
+          toast.error({ title: err.errMsg || "Error : Something bad happened" })
         )
         .finally(() => {
           props.saveCallback && props.saveCallback();
@@ -135,7 +135,7 @@ export default function ProblemForm(props: {
           props.saveCallback && props.saveCallback();
         })
         .catch((err) =>
-          toast.error({ title: err || "Error : Something bad happened" })
+          toast.error({ title: err.errMsg || "Error : Something bad happened" })
         )
         .finally(() => setLoading(false));
     }

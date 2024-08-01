@@ -13,19 +13,19 @@ declare global {
 }
 
 const auth = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const token = req.headers.authorization?.split(" ")[1];
+  const token = req.headers.authorization?.split(" ")[1];
 
+  if (!token) return res.status(401).json({ message: "Unauthorized" });
+
+  try {
     let decodeData;
 
-    if (token) {
-      decodeData = jwt.verify(token, process.env.SECRET_KEY || "test") as {
-        email: string;
-        id: string;
-      };
+    decodeData = jwt.verify(token, process.env.SECRET_KEY || "test") as {
+      email: string;
+      id: string;
+    };
 
-      req.userId = decodeData?.id;
-    }
+    req.userId = decodeData?.id;
 
     next();
   } catch (error) {

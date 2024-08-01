@@ -27,10 +27,15 @@ export default function CodeEditor(props: { problem: Problem }) {
     testresults: Testresult[];
   }>();
 
+  const [compilerError, setCompilerError] = useState<{
+    output: string;
+    verdict: string;
+  }>({ output: "", verdict: "" });
   const [loading, setLoading] = useState<{ output: boolean; verdict: boolean }>(
     { output: false, verdict: false }
   );
 
+  console.log(result);
   const { authenticated } = useAuth();
   const toast = useToast();
 
@@ -51,14 +56,23 @@ export default function CodeEditor(props: { problem: Problem }) {
   }
 
   function runHandler() {
+    if (!input) {
+      toast.error({ title: "Please Enter Input" });
+      return;
+    }
+    setResult(undefined);
+    setCompilerError({ output: "", verdict: "" });
     setActive(2);
     setLoading({ ...loading, output: true });
     api.compiler
       .runCode(lang.fileName, code, input)
       .then((res) => setOutput(res.output))
       .catch((err) => {
-        console.log(err);
-        toast.error({ title: err || "Something went wrong" });
+        if (err.isCompilerError) {
+          setCompilerError({ verdict: "", output: err.errMsg });
+        } else {
+          toast.error({ title: err.errMsg || "Something went wrong accha" });
+        }
       })
       .finally(() => {
         setLoading({ ...loading, output: false });
@@ -66,12 +80,20 @@ export default function CodeEditor(props: { problem: Problem }) {
   }
 
   function submitHandler() {
+    setResult(undefined);
+    setCompilerError({ output: "", verdict: "" });
     setActive(3);
     setLoading({ ...loading, verdict: true });
     api.compiler
       .submitCode(lang.fileName, code, problem.testcases, problem?._id)
       .then((res) => setResult(res))
-      .catch((err) => toast.error({ title: err || "Something went wrong" }))
+      .catch((err) => {
+        if (err.isCompilerError) {
+          setCompilerError({ output: "", verdict: err.errMsg });
+        } else {
+          toast.error({ title: err.errMsg || "Something went wrong" });
+        }
+      })
       .finally(() => setLoading({ ...loading, verdict: false }));
   }
 
@@ -168,14 +190,27 @@ export default function CodeEditor(props: { problem: Problem }) {
           {active === 2 && (
             <>
               {!loading.output && (
-                <textarea
-                  rows={4}
-                  name="verdict"
-                  disabled
-                  value={output}
-                  className=" resize-none w-full bg-black-1 py-4 px-6 text-back rounded-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary"
-                />
-              )}{" "}
+                <div
+                  className={twMerge(
+                    "w-full h-32 flex flex-col gap-y-2  bg-black-1 py-4 px-6 rounded-lg font-medium overflow-y-auto scrollbar-primary",
+                    compilerError.output.length ? "text-red-500" : "text-back"
+                  )}
+                >
+                  <h3
+                    className={twMerge(
+                      "font -inter capitalize text-lg",
+                      compilerError.output.length ? "block" : "hidden"
+                    )}
+                  >
+                    Compilation Error
+                  </h3>
+                  <pre className="break-words font-inter whitespace-pre-wrap">
+                    {compilerError.output.length
+                      ? compilerError.output
+                      : output}
+                  </pre>
+                </div>
+              )}
               {loading.output && (
                 <div className="w-full h-32 flex items-center justify-center bg-black-1 py-4 px-6 text-back rounded-lg font-medium">
                   <Loader className="w-12" />
@@ -184,31 +219,44 @@ export default function CodeEditor(props: { problem: Problem }) {
             </>
           )}
           {active === 3 && (
-            <div className="w-full h-32 flex justify-center bg-black-1 py-4 px-6 text-back rounded-lg font-medium">
+            <div className="w-full h-32 flex justify-center bg-black-1 py-4 px-6 rounded-lg font-medium overflow-y-auto scrollbar-primary">
               {!loading.verdict && (
                 <div className="flex flex-col w-full gap-y-2">
                   <h3
                     className={twMerge(
                       "font-inter capitalize text-lg",
-                      result?.status ? "text-green-500" : "text-red-500"
+                      compilerError.verdict.length
+                        ? "text-red-500"
+                        : result?.status
+                          ? "text-green-500"
+                          : "text-red-500"
                     )}
                   >
-                    {result?.verdict}
+                    {compilerError.verdict.length
+                      ? "Compilation Error"
+                      : result?.verdict}
                   </h3>
-                  <div className="flex flex-wrap gap-x-2 w-full">
-                    {result?.testresults.map((testresult, key) => (
-                      <p
-                        className={twMerge(
-                          "px-2 py-1 rounded-lg  bg-opacity-20",
-                          testresult.status
-                            ? "bg-green-500 text-green-500"
-                            : "bg-red-500 text-red-500"
-                        )}
-                      >
-                        test case {testresult.testcase}
-                      </p>
-                    ))}
-                  </div>
+                  {compilerError.verdict.length ? (
+                    <pre className="break-words font-inter whitespace-pre-wrap text-red-500">
+                      {compilerError.verdict}
+                    </pre>
+                  ) : (
+                    <div className="flex flex-wrap gap-x-2 w-full">
+                      {result?.testresults.map((testresult, key) => (
+                        <p
+                          key={key}
+                          className={twMerge(
+                            "px-2 py-1 rounded-lg  bg-opacity-20",
+                            testresult.status
+                              ? "bg-green-500 text-green-500"
+                              : "bg-red-500 text-red-500"
+                          )}
+                        >
+                          test case {testresult.testcase}
+                        </p>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
               {loading.verdict && (
@@ -306,3 +354,22 @@ const navlink = [
     value: "Verdict",
   },
 ] as const;
+{
+}
+
+{
+  /* <textarea
+rows={4}
+name="verdict"
+disabled
+value={
+  compilerError.length > 0
+    ? "Compilation Error:\n" + compilerError
+    : output
+}
+className={twMerge(
+  " resize-none w-full bg-black-1 py-4 px-6 rounded-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary",
+  compilerError.length ? "text-red-500" : "text-back"
+)}
+/> */
+}
