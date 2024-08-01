@@ -56,7 +56,10 @@ export default function CodeEditor(props: { problem: Problem }) {
     api.compiler
       .runCode(lang.fileName, code, input)
       .then((res) => setOutput(res.output))
-      .catch((err) => toast.error({ title: err || "Something went wrong" }))
+      .catch((err) => {
+        console.log(err);
+        toast.error({ title: err || "Something went wrong" });
+      })
       .finally(() => {
         setLoading({ ...loading, output: false });
       });

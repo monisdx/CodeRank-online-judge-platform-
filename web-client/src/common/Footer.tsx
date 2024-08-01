@@ -20,9 +20,8 @@ export default function Footer() {
         </ul>
       </div>
     </section>
-
-  )
-};
+  );
+}
 
 export const socials = [
   {
@@ -56,5 +55,3 @@ export const socials = [
     url: "#",
   },
 ];
-
-

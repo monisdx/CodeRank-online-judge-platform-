@@ -58,8 +58,20 @@ export default function ProtectedRoute(props: ProtectedRouteProps) {
       <>
         {!loading && (
           <>
-            {authenticated && user?.isadmin ? (
-              <Outlet />
+            {authenticated ? (
+              <>
+                {user &&
+                  (user.isadmin ? (
+                    <Outlet />
+                  ) : (
+                    <Navigate to={`/auth?redirectUrl=${pathname}`} />
+                  ))}
+                {!user && (
+                  <div className="flex flex-col justify-center items-center min-h-screen">
+                    <Loader className="w-1/5" />
+                  </div>
+                )}
+              </>
             ) : (
               <Navigate to={`/auth?redirectUrl=${pathname}`} />
             )}

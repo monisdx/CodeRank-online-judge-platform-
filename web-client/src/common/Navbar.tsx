@@ -11,7 +11,7 @@ export default function Navbar() {
   const isAuth = isAuthTokenPresent();
   const navigate = useNavigate();
   const { user } = useAuth();
-  console.log(user?.picture);
+
   return (
     <nav className="p-page w-full flex py-5 justify-evenly items-center z-[999] bg-black-8 border-black-6 border-b-2">
       <Link to="/" className="flex items-center gap-4 cursor-pointer">
@@ -21,8 +21,8 @@ export default function Navbar() {
       <div className="widescreen:flex hidden justify-center items-center gap-x-20 flex-1">
         {navLinks.slice(0, 3).map((item, key) => (
           <Link
-            key={key}
             to={item.to}
+            key={key}
             className={`font-cabin font-medium cursor-pointer text-md text-back/50 hover:text-back duration-300`}
           >
             {item.title}
@@ -136,7 +136,7 @@ export const navLinks = [
     title: "Home",
   },
   {
-    to: "#contact",
+    to: "/#contact",
     id: "contact us",
     title: "Contact Us",
   },
