@@ -22,8 +22,6 @@ export default function ProblemListPage() {
   const queryParams = useQueryParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useAuth();
-  console.log(user);
 
   const urlConfig: any = searchParamsToObject(queryParams);
 
@@ -39,14 +37,14 @@ export default function ProblemListPage() {
 
   const problems = data?.problemlist;
 
-  const initaialrender = useRef(true);
+  const [initialRenderComplete, setInitialRenderComplete] = useState(false);
 
   useEffect(() => {
-    if (initaialrender.current) {
-      initaialrender.current = false;
-      return;
+    if (initialRenderComplete) {
+      refetchProblems();
+    } else {
+      setInitialRenderComplete(true);
     }
-    refetchProblems();
   }, [config]);
 
   useEffect(() => {
@@ -145,7 +143,10 @@ export default function ProblemListPage() {
               </div>
             </label>
             <button
-              onClick={() => navigate({ pathname: "/problems", search: "" })}
+              onClick={() => {
+                setSearch("");
+                navigate({ pathname: "/problems", search: "" });
+              }}
               className="flex items-center justify-between bg-primary px-4 py-3 rounded-lg outline-none font-medium cursor-pointer"
             >
               <Icon icon="filter_off" className="text-back text-xl" />

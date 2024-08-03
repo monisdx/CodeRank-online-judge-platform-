@@ -3,6 +3,8 @@ import Icon from "../../../common/Icon";
 import { Problem } from "../../../types";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../contexts/authContext";
+import useApiResponse from "../../../hooks/useApiResponse";
+import api from "../../../utils/api";
 
 interface ProblemCardProps {
   problem: Problem;
@@ -10,7 +12,8 @@ interface ProblemCardProps {
 
 export default function ProblemCard(props: ProblemCardProps) {
   const { problem } = props;
-  const { user } = useAuth();
+  const { data } = useApiResponse(api.user.getCurrentUser);
+  const user = data?.user;
   const solved = user?.problems.indexOf(problem._id);
 
   return (

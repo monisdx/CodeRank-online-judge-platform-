@@ -18,8 +18,8 @@ export default function SubmissionPage() {
       </h1>
       {!loading &&
         (mySubmissions && mySubmissions.length > 0 ? (
-          <div className="flex w-full overflow-x-auto scrollbar-primary rounded-lg">
-            <table className="flex w-full flex-col min-w-[50rem]">
+          <div className="flex w-full overflow-auto scrollbar-primary rounded-lg">
+            <table className="flex w-full flex-col h-[70vh] min-w-[50rem]">
               <thead className="font-cabin text-lg font-medium text-back bg-primary">
                 <tr className="flex">
                   <th className="basis-[30%] p-2 text-nowrap text-start">
