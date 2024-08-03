@@ -7,8 +7,6 @@ import {
   executePython,
 } from "../utils/executeCode";
 import { generateInputFile } from "../utils/generateInputFile";
-import Submission from "../models/submission";
-import User from "../models/user";
 import { addSubmission } from "./submission";
 import { addLeaderBoardUser } from "./users";
 
@@ -22,6 +20,7 @@ export const runCode = async (req: Request, res: Response) => {
     const filePath = await generateFile(language, code);
     const input_filePath = await generateInputFile(input);
     let output;
+
     try {
       if (language === "cpp") {
         output = await executeCpp(filePath, input_filePath);
@@ -39,7 +38,7 @@ export const runCode = async (req: Request, res: Response) => {
 
       res.status(200).json({ output });
     } catch (err) {
-      res.status(402).json({ stderr: (err as any).stderr });
+      res.status(408).json({ stderr: (err as any).stderr });
     }
   } catch (err) {
     res.status(500).json({ message: err });
@@ -98,7 +97,6 @@ export const submitCode = async (req: Request, res: Response) => {
             language,
             new Date().toISOString()
           );
-
           return res.status(200).json({
             testresults,
             verdict: `wrong answer on testcase ${index}`,
@@ -108,7 +106,7 @@ export const submitCode = async (req: Request, res: Response) => {
 
         index++;
       } catch (err) {
-        return res.status(402).json({ stderr: (err as any).stderr });
+        return res.status(408).json({ stderr: (err as any).stderr });
       }
     }
 

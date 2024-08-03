@@ -27,15 +27,15 @@ export default function CodeEditor(props: { problem: Problem }) {
     testresults: Testresult[];
   }>();
 
-  const [compilerError, setCompilerError] = useState<{
+  const [stdErrorMsg, setStdErrorMsg] = useState<{
     output: string;
     verdict: string;
   }>({ output: "", verdict: "" });
+
   const [loading, setLoading] = useState<{ output: boolean; verdict: boolean }>(
     { output: false, verdict: false }
   );
 
-  console.log(result);
   const { authenticated } = useAuth();
   const toast = useToast();
 
@@ -61,17 +61,17 @@ export default function CodeEditor(props: { problem: Problem }) {
       return;
     }
     setResult(undefined);
-    setCompilerError({ output: "", verdict: "" });
+    setStdErrorMsg({ output: "", verdict: "" });
     setActive(2);
     setLoading({ ...loading, output: true });
     api.compiler
       .runCode(lang.fileName, code, input)
       .then((res) => setOutput(res.output))
       .catch((err) => {
-        if (err.isCompilerError) {
-          setCompilerError({ verdict: "", output: err.errMsg });
+        if (err.isStdError) {
+          setStdErrorMsg({ verdict: "", output: err.errMsg });
         } else {
-          toast.error({ title: err.errMsg || "Something went wrong accha" });
+          toast.error({ title: err.errMsg || "Something went wrong" });
         }
       })
       .finally(() => {
@@ -81,15 +81,15 @@ export default function CodeEditor(props: { problem: Problem }) {
 
   function submitHandler() {
     setResult(undefined);
-    setCompilerError({ output: "", verdict: "" });
+    setStdErrorMsg({ output: "", verdict: "" });
     setActive(3);
     setLoading({ ...loading, verdict: true });
     api.compiler
       .submitCode(lang.fileName, code, problem.testcases, problem?._id)
       .then((res) => setResult(res))
       .catch((err) => {
-        if (err.isCompilerError) {
-          setCompilerError({ output: "", verdict: err.errMsg });
+        if (err.isStdError) {
+          setStdErrorMsg({ output: "", verdict: err.errMsg });
         } else {
           toast.error({ title: err.errMsg || "Something went wrong" });
         }
@@ -193,21 +193,23 @@ export default function CodeEditor(props: { problem: Problem }) {
                 <div
                   className={twMerge(
                     "w-full h-32 flex flex-col gap-y-2  bg-black-1 py-4 px-6 rounded-lg font-medium overflow-y-auto scrollbar-primary",
-                    compilerError.output.length ? "text-red-500" : "text-back"
+                    stdErrorMsg.output.length ? "text-red-500" : "text-back"
                   )}
                 >
                   <h3
                     className={twMerge(
                       "font -inter capitalize text-lg",
-                      compilerError.output.length ? "block" : "hidden"
+                      stdErrorMsg.output.length ? "block" : "hidden"
                     )}
                   >
                     Compilation Error
                   </h3>
-                  <pre className="break-words font-inter whitespace-pre-wrap">
-                    {compilerError.output.length
-                      ? compilerError.output
-                      : output}
+                  <pre
+                    className={twMerge(
+                      "break-words font-inter whitespace-pre-wrap"
+                    )}
+                  >
+                    {stdErrorMsg.output.length ? stdErrorMsg.output : output}
                   </pre>
                 </div>
               )}
@@ -225,20 +227,20 @@ export default function CodeEditor(props: { problem: Problem }) {
                   <h3
                     className={twMerge(
                       "font-inter capitalize text-lg",
-                      compilerError.verdict.length
+                      stdErrorMsg.verdict.length
                         ? "text-red-500"
                         : result?.status
                           ? "text-green-500"
                           : "text-red-500"
                     )}
                   >
-                    {compilerError.verdict.length
+                    {stdErrorMsg.verdict.length
                       ? "Compilation Error"
                       : result?.verdict}
                   </h3>
-                  {compilerError.verdict.length ? (
+                  {stdErrorMsg.verdict.length ? (
                     <pre className="break-words font-inter whitespace-pre-wrap text-red-500">
-                      {compilerError.verdict}
+                      {stdErrorMsg.verdict}
                     </pre>
                   ) : (
                     <div className="flex flex-wrap gap-x-2 w-full">
@@ -363,13 +365,13 @@ rows={4}
 name="verdict"
 disabled
 value={
-  compilerError.length > 0
-    ? "Compilation Error:\n" + compilerError
+  stdErrorMsg.length > 0
+    ? "Compilation Error:\n" + stdErrorMsg
     : output
 }
 className={twMerge(
   " resize-none w-full bg-black-1 py-4 px-6 rounded-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary",
-  compilerError.length ? "text-red-500" : "text-back"
+  stdErrorMsg.length ? "text-red-500" : "text-back"
 )}
 /> */
 }

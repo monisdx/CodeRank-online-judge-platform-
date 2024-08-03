@@ -52,10 +52,10 @@ function createApi() {
       ) {
         api.auth.logout();
       }
-      let isCompilerError = false;
+      let isStdError = false;
 
       if (res?.data?.stderr) {
-        isCompilerError = true;
+        isStdError = true;
       }
 
       const errMsg =
@@ -65,7 +65,7 @@ function createApi() {
         error?.message ||
         error ||
         `"unknown error happened"`;
-      return Promise.reject({ errMsg, isCompilerError });
+      return Promise.reject({ errMsg, isStdError });
     }
   );
 
