@@ -17,21 +17,14 @@ export default {
         back: "#ffffff",
         black: {
           1: "#15171C",
-          2: "#222429",//border
-          3: "#101114",//bg2
+          2: "#222429", //border
+          3: "#101114", //bg2
           4: "#252525",
           5: "#2E3036",
-          6: "#252134",//border
-          7: "#1B1F29",//input
-          8: "#0E0C15",//bg1
+          6: "#252134", //border
+          7: "#1B1F29", //input
+          8: "#0E0C15", //bg1
         },
-        // white: {
-        //   1: "#FFFFFF",
-        //   2: "rgba(255, 255, 255, 0.72)",
-        //   3: "rgba(255, 255, 255, 0.4)",
-        //   4: "rgba(255, 255, 255, 0.64)",
-        //   5: "rgba(255, 255, 255, 0.80)",
-        // },
       },
       borderRadius: {
         inherit: "inherit",
@@ -52,7 +45,11 @@ export default {
         1: 1,
       },
       gridTemplateColumns: {
-        'auto-fit-250': 'repeat(auto-fit, minmax(250px, 1fr))',
+        "auto-fit-250": "repeat(auto-fit, minmax(250px, 1fr))",
+      },
+      backgroundImage: {
+        "conic-gradient":
+          "conic-gradient(from 225deg, #FFC876, #79FFF7, #9F53FF, #FF98E2, #FFC876)",
       },
     },
   },

@@ -1,7 +1,16 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
+import emailjs from "@emailjs/browser";
+import useToast from "../../../hooks/useToast";
+
+const emailServiceId = import.meta.env.VITE_EMAIL_SERVICE_ID;
+const emailTemplateId = import.meta.env.VITE_EMAIL_TEMPLATE_ID;
+const emailPublicId = import.meta.env.VITE_EMAIL_PUBLIC_ID;
+const adminEmail = import.meta.env.VITE_ADMINEMAIL;
+const adminName = import.meta.env.VITE_ADMINNAME;
 
 export default function Contact() {
   const formRef = useRef<HTMLFormElement>(null);
+  const toast = useToast();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -10,7 +19,36 @@ export default function Contact() {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  function handleSubmit() {}
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setLoading(true);
+
+    emailjs
+      .send(
+        emailServiceId,
+        emailTemplateId,
+        {
+          from_name: form.name,
+          to_name: adminName,
+          from_email: form.email,
+          to_email: adminEmail,
+          message: form.message,
+        },
+        emailPublicId
+      )
+      .then(() => {
+        setLoading(false);
+        toast.display({
+          title: "Thank you. I will get back to you as soon as possible.",
+        });
+        setForm({ name: "", email: "", message: "" });
+      }),
+      (error: any) => {
+        console.log(error);
+        setLoading(false);
+        toast.error({ title: "Something went wrong" });
+      };
+  }
 
   return (
     <section id="contact" className="p-page py-10 bg-black-8">
@@ -37,7 +75,7 @@ export default function Contact() {
                   setForm({ ...form, [e.target.name]: e.target.value })
                 }
                 placeholder="What's your good name?"
-                className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium"
+                className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium focus-visible:ring-primary focus-visible:ring-1 caret-primary"
               />
             </label>
             <label className="flex flex-col">
@@ -50,7 +88,7 @@ export default function Contact() {
                   setForm({ ...form, [e.target.name]: e.target.value })
                 }
                 placeholder="What's your web address?"
-                className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium"
+                className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium focus-visible:ring-primary focus-visible:ring-1 caret-primary"
               />
             </label>
             <label className="flex flex-col">
@@ -63,7 +101,7 @@ export default function Contact() {
                   setForm({ ...form, [e.target.name]: e.target.value })
                 }
                 placeholder="What you want to say?"
-                className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium"
+                className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium focus-visible:ring-primary focus-visible:ring-1 caret-primary"
               />
             </label>
 

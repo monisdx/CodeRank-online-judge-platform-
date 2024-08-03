@@ -17,14 +17,16 @@ export default function Hero() {
           </p>
         </div>
         <div className="relative mobile:max-w-[23rem] mx-auto widescreen:max-w-5xl widescreen:mb-[10rem] mobile:mb-[6rem]">
-          <div className="relative z-1 mobile:aspect-[33/40] rounded-b-[0.9rem] overflow-hidden  widescreen:aspect-[1024/490] rounded-2xl border-black-6 border-4">
-            <img
-              src={"/images/robot.jpg"}
-              className="w-full scale-[1.7] translate-y-[8%] md:scale-[1] md:-translate-y-[10%] lg:-translate-y-[23%]"
-              width={1024}
-              height={490}
-              alt="AI"
-            />
+          <div className="relative z-1 p-0.5 rounded-2xl bg-conic-gradient">
+            <div className="relative z-1 mobile:aspect-[33/40] rounded-b-[0.9rem] overflow-hidden  widescreen:aspect-[1024/490] rounded-2xl">
+              <img
+                src={"/images/robot.jpg"}
+                className="w-full scale-[1.7] translate-y-[8%] md:scale-[1] md:-translate-y-[10%] lg:-translate-y-[23%]"
+                width={1024}
+                height={490}
+                alt="AI"
+              />
+            </div>
           </div>
           <div className="absolute -top-[54%] left-1/2 w-[234%] -translate-x-1/2 md:-top-[46%] md:w-[138%] lg:-top-[104%]">
             <img
@@ -35,7 +37,7 @@ export default function Hero() {
               alt="hero"
             />
           </div>
-          <BackgroundCircles top={'-35rem'}/>
+          <BackgroundCircles top={"-35rem"} />
         </div>
       </div>
     </section>

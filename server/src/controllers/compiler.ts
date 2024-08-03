@@ -9,6 +9,8 @@ import {
 import { generateInputFile } from "../utils/generateInputFile";
 import Submission from "../models/submission";
 import User from "../models/user";
+import { addSubmission } from "./submission";
+import { addLeaderBoardUser } from "./users";
 
 export const runCode = async (req: Request, res: Response) => {
   const { language = "cpp", code, input } = req.body;
@@ -88,14 +90,15 @@ export const submitCode = async (req: Request, res: Response) => {
         testresults.push({ testcase: index, status: iscorrect });
 
         if (!iscorrect) {
-          await Submission.create({
-            user_id: req.userId,
+          await addSubmission(
+            req.userId,
             problem_id,
-            status: false,
-            message: "wrong answer",
+            false,
+            "wrong answer",
             language,
-            createdAt: new Date().toISOString(),
-          });
+            new Date().toISOString()
+          );
+
           return res.status(200).json({
             testresults,
             verdict: `wrong answer on testcase ${index}`,
@@ -109,30 +112,19 @@ export const submitCode = async (req: Request, res: Response) => {
       }
     }
 
-    //save submission
-    await Submission.create({
-      user_id: req.userId,
+    await addSubmission(
+      req.userId,
       problem_id,
-      status: true,
-      message: "accepted",
+      true,
+      "accepted",
       language,
-      createdAt: new Date().toISOString(),
-    });
-    //save data for leaderboard
-    const user = await User.findById(req.userId);
+      new Date().toISOString()
+    );
 
-    if (user) {
-      const index = user.problems.findIndex((id) => id === String(problem_id));
-      if (index === -1) {
-        user?.problems.push(problem_id);
-        await user?.save();
-      }
-    } else {
-      res.status(500).json({ success: false, message: "User not exist" });
-    }
+    await addLeaderBoardUser(req.userId, problem_id);
 
     res.status(200).json({ testresults, verdict: "accepted", status: true });
-  } catch (err) {
-    res.status(500).json({ message: err });
+  } catch (err: any) {
+    res.status(500).json({ message: err.message });
   }
 };

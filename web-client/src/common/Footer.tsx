@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
     <section className="bg-black-8 border-black-6 border">
-      <div className="flex p-8 justify-between items-center gap-10 max-sm:flex-col">
+      <div className="flex p-4 justify-between items-center gap-10 max-sm:flex-col">
         <p className="text-back">
           © {new Date().getFullYear()}. All rights reserved.
         </p>
@@ -12,7 +12,7 @@ export default function Footer() {
               key={item.id}
               href={item.url}
               target="_blank"
-              className="flex items-center justify-center w-10 h-10 bg-n-7 rounded-full transition-colors hover:bg-n-6"
+              className="flex items-center justify-center w-10 h-10 rounded-full transition-colors hover:bg-black-6"
             >
               <img src={item.iconUrl} width={16} height={16} alt={item.title} />
             </a>

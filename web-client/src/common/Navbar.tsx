@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Icon from "./Icon";
 import api, { isAuthTokenPresent } from "../utils/api";
 import { useAuth } from "../contexts/authContext";
@@ -9,8 +9,9 @@ export default function Navbar() {
   const [mobileNav, setMobileNav] = useState<boolean>(false);
   const [profile, setProfile] = useState<boolean>(false);
   const isAuth = isAuthTokenPresent();
-  const navigate = useNavigate();
   const { user } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   return (
     <nav className="p-page w-full flex py-5 justify-evenly items-center z-[999] bg-black-8 border-black-6 border-b-2">
@@ -19,11 +20,11 @@ export default function Navbar() {
         <p className="text-back font-bold text-lg font-raleway">CodeMaster</p>
       </Link>
       <div className="widescreen:flex hidden justify-center items-center gap-x-20 flex-1">
-        {navLinks.slice(0, 3).map((item, key) => (
+        {navLinks.map((item, key) => (
           <Link
             to={item.to}
             key={key}
-            className={`font-cabin font-medium cursor-pointer text-md text-back/50 hover:text-back duration-300`}
+            className={`font-cabin font-medium cursor-pointer text-md text-back hover:text-primary duration-300`}
           >
             {item.title}
           </Link>
@@ -78,7 +79,7 @@ export default function Navbar() {
       ) : (
         <Link
           to={"/auth"}
-          className="widescreen:flex hidden px-5 py-2 font-medium font-cabin text-md rounded-xl text-back bg-primary outline-none border-none"
+          className="widescreen:flex hidden px-5 py-2 font-medium font-cabin text-md rounded-xl text-back bg-primary hover:text-primary hover:bg-black-8 hover:ring-[1px] hover:ring-primary outline-none duration-300"
         >
           Sign In
         </Link>
@@ -99,25 +100,33 @@ export default function Navbar() {
               <Link
                 key={key}
                 to={item.to}
-                className={`font-cabin font-medium cursor-pointer text-md text-back/50 hover:text-back mb-4 duration-300`}
+                className={`font-cabin font-medium cursor-pointer text-md text-back hover:text-primary mb-4 duration-300`}
               >
                 {item.title}
               </Link>
             ))}
             {isAuth ? (
-              <button
-                onClick={() => {
-                  api.auth.logout();
-                }}
-                className="flex items-center gap-x-2 text-back/50 hover:text-back duration-300 font-cabin font-medium"
-              >
-                <Icon className="text-2xl" icon="logout" />
-                Log Out
-              </button>
+              <>
+                <Link
+                  to={"/submission"}
+                  className={`font-cabin font-medium cursor-pointer text-md text-back hover:text-primary mb-4 duration-300`}
+                >
+                  Submissions
+                </Link>
+                <button
+                  onClick={() => {
+                    api.auth.logout();
+                  }}
+                  className="flex items-center gap-x-2 text-back/50 hover:text-back duration-300 font-cabin font-medium"
+                >
+                  <Icon className="text-2xl" icon="logout" />
+                  Log Out
+                </button>
+              </>
             ) : (
               <Link
                 to={"/auth"}
-                className="flex px-5 py-2 font-medium font-cabin text-md rounded-xl text-back bg-primary outline-none border-none"
+                className="flex px-5 py-2 font-medium font-cabin text-md rounded-xl text-back bg-primary  hover:text-primary hover:bg-black-8 hover:ring-[1px] hover:ring-primary outline-none"
               >
                 Sign In
               </Link>
@@ -144,10 +153,5 @@ export const navLinks = [
     to: "/problems",
     id: "problem",
     title: "Problems",
-  },
-  {
-    to: "/submission",
-    id: "submission",
-    title: "Submissions",
   },
 ];

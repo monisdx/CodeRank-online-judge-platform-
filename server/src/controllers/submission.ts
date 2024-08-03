@@ -13,3 +13,21 @@ export const getSubmissionByUser = async (req: Request, res: Response) => {
     res.status(500).json({ message: error });
   }
 };
+
+export const addSubmission = async (
+  user_id: string | undefined,
+  problem_id: string,
+  status: boolean,
+  message: string,
+  language: string,
+  createdAt: string
+) => {
+  await Submission.create({
+    user_id,
+    problem_id,
+    status,
+    message,
+    language,
+    createdAt,
+  });
+};

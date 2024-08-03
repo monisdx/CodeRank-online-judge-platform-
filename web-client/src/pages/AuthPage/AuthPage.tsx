@@ -6,6 +6,7 @@ import { twMerge } from "tailwind-merge";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/authContext";
 import GoogleLoginButton from "./components/GoogleLoginButton";
+import Icon from "../../common/Icon";
 
 export default function AuthPage() {
   const parallaxRef = useRef(null);
@@ -52,8 +53,8 @@ export default function AuthPage() {
   return (
     <section className="p-page overflow-hidden bg-black-8">
       <div className="relative" ref={parallaxRef}>
-        <div className=" relative h-screen flex items-center justify-center mobile:max-w-[25rem] mx-auto widescreen:max-w-5xl -mb-[10rem] mt-[20rem]">
-          <div className="relative z-1 widescreen:w-[60%] mobile:w-full flex-col bg-black-3 p-8 rounded-2xl gap-y-10 -top-[15rem]">
+        <div className=" relative h-screen flex items-center justify-center mobile:max-w-[25rem] mx-auto widescreen:max-w-5xl -mb-[20rem] mt-[20rem]">
+          <div className="relative z-1 widescreen:w-[50%] mobile:w-full flex-col bg-black-3 p-8 rounded-2xl -top-[21rem]">
             <div className="flex items-center justify-center">
               <img
                 src={"/images/brain.svg"}
@@ -63,11 +64,14 @@ export default function AuthPage() {
             </div>
             <form
               onSubmit={handleSubmit}
-              className="mt-12 flex flex-col gap-y-8"
+              className="mt-10 flex flex-col gap-y-6"
             >
               {isSignUp && (
-                <label className="flex flex-col">
-                  <span className="text-back font-medium mb-4">Full Name</span>
+                <label className="flex flex-col relative">
+                  <Icon
+                    icon="person"
+                    className="absolute inset-y-1/2 -translate-y-1/2 left-4 text-secondary text-2xl"
+                  />
                   <input
                     type="text"
                     name="name"
@@ -77,15 +81,16 @@ export default function AuthPage() {
                     onChange={(e) =>
                       setForm({ ...form, [e.target.name]: e.target.value })
                     }
-                    placeholder="Enter your name"
-                    className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none focus-visible:ring-primary focus-visible:ring-1 caret-primary font-medium"
+                    placeholder="John Doe"
+                    className="bg-black-1 py-4 px-6 pl-12 placeholder:text-secondary text-back rounded-lg outline-none border-none focus-visible:ring-primary focus-visible:ring-1 caret-primary font-medium"
                   />
                 </label>
               )}
-              <label className="flex flex-col">
-                <span className="text-back font-medium mb-4">
-                  Email Address
-                </span>
+              <label className="flex flex-col relative">
+                <Icon
+                  icon="mail"
+                  className="absolute inset-y-1/2 -translate-y-1/2 left-4 text-secondary text-2xl"
+                />
                 <input
                   type="email"
                   name="email"
@@ -94,12 +99,15 @@ export default function AuthPage() {
                   onChange={(e) =>
                     setForm({ ...form, [e.target.name]: e.target.value })
                   }
-                  placeholder="Enter your email"
-                  className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none focus-visible:ring-primary focus-visible:ring-1 caret-primary font-medium"
+                  placeholder="johndoe@gmail.com"
+                  className="bg-black-1 py-4 px-6 pl-12 placeholder:text-secondary text-back rounded-lg outline-none border-none focus-visible:ring-primary focus-visible:ring-1 caret-primary font-medium"
                 />
               </label>
-              <label className="flex flex-col">
-                <span className="text-back font-medium mb-4">Password</span>
+              <label className="flex flex-col relative">
+                <Icon
+                  icon="key"
+                  className="absolute inset-y-1/2 -translate-y-1/2 left-4 -rotate-45 text-secondary text-2xl"
+                />
                 <input
                   type={showpassword ? "text" : "password"}
                   name="password"
@@ -109,15 +117,27 @@ export default function AuthPage() {
                   onChange={(e) =>
                     setForm({ ...form, [e.target.name]: e.target.value })
                   }
-                  placeholder="Enter Password"
-                  className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none focus-visible:ring-primary focus-visible:ring-1 caret-primary font-medium"
+                  placeholder="••••••••••"
+                  className="bg-black-1 py-4 px-12 placeholder:text-secondary text-back rounded-lg outline-none border-none focus-visible:ring-primary focus-visible:ring-1 caret-primary font-medium"
                 />
+                <button
+                  type="button"
+                  onClick={() => setshowpassword(!showpassword)}
+                  disabled={!form.password.length}
+                  className="absolute inset-y-0 right-2 my-auto disabled:pointer-events-none disabled:opacity-50"
+                >
+                  <Icon
+                    icon={showpassword ? "visibilityOff" : "visibility"}
+                    className="text-secondary text-2xl"
+                  />
+                </button>
               </label>
               {isSignUp && (
-                <label className="flex flex-col">
-                  <span className="text-back font-medium mb-4">
-                    Confirm Password
-                  </span>
+                <label className="flex flex-col relative">
+                  <Icon
+                    icon="key"
+                    className="absolute inset-y-1/2 -translate-y-1/2 left-4 -rotate-45 text-secondary text-2xl"
+                  />
                   <input
                     type="password"
                     name="confirmpassword"
@@ -127,8 +147,8 @@ export default function AuthPage() {
                     onChange={(e) =>
                       setForm({ ...form, [e.target.name]: e.target.value })
                     }
-                    placeholder="Confirm New Password"
-                    className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none focus-visible:ring-primary focus-visible:ring-1 caret-primary font-medium"
+                    placeholder="••••••••••"
+                    className="bg-black-1 py-4 px-6 pl-12 placeholder:text-secondary text-back rounded-lg outline-none border-none focus-visible:ring-primary focus-visible:ring-1 caret-primary font-medium"
                   />
                 </label>
               )}
@@ -177,7 +197,7 @@ export default function AuthPage() {
               </button>
             </div>
           </div>
-          <div className="absolute  -top-[54%] left-[45%] widescreen:left-[48%] w-[234%] -translate-x-1/2 widescreen:w-[138%] widescreen:-top-[90%]">
+          <div className="absolute  -top-[54%] left-[50%] widescreen:left-[50%] w-[234%] -translate-x-1/2 widescreen:w-[138%] widescreen:-top-[90%]">
             <img src={"/images/hero-background.jpg"} className="" alt="hero" />
           </div>
           <BackgroundCircles top={"-20rem"} />

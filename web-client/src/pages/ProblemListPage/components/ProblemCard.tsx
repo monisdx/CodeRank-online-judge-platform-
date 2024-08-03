@@ -2,6 +2,7 @@ import { twMerge } from "tailwind-merge";
 import Icon from "../../../common/Icon";
 import { Problem } from "../../../types";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../../contexts/authContext";
 
 interface ProblemCardProps {
   problem: Problem;
@@ -9,6 +10,8 @@ interface ProblemCardProps {
 
 export default function ProblemCard(props: ProblemCardProps) {
   const { problem } = props;
+  const { user } = useAuth();
+  const solved = user?.problems.indexOf(problem._id);
 
   return (
     <Link
@@ -45,14 +48,19 @@ export default function ProblemCard(props: ProblemCardProps) {
         </div>
       </div>
       <div className="flex items-center justify-center">
-        <button className="flex items-center gap-x-2 rounded-lg px-6 py-2 text-back p-1 border border-primary group-hover:bg-primary">
-          {true ? (
-            <p className="text-primary group-hover:text-back">Solve</p>
-          ) : (
+        <button
+          className={twMerge(
+            "min-w-[9rem] flex items-center justify-center gap-x-2 rounded-lg px-6 py-2 text-back border border-primary",
+            user && solved !== -1 ? "bg-primary" : "group-hover:bg-primary"
+          )}
+        >
+          {user && solved !== -1 ? (
             <>
               <p className="text-back">Solved</p>
               <Icon icon="checked" className="text-back text-2xl" />
             </>
+          ) : (
+            <p className="text-primary group-hover:text-back">Solve</p>
           )}
         </button>
       </div>

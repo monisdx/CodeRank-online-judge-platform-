@@ -42,6 +42,7 @@ export default function ProtectedRoute(props: ProtectedRouteProps) {
   }
 
   if (props.type === ProtectedTypes.PUBLICONLY) {
+    console.log("kk");
     return (
       <>
         {!loading && (

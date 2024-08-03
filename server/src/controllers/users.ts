@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/user.ts";
 import axios from "axios";
 import dotenv from "dotenv";
+import { rejects } from "assert";
 
 dotenv.config();
 
@@ -125,5 +126,20 @@ export const getLeaderBoardUsers = async (req: Request, res: Response) => {
     res.status(200).json({ usersList: users });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+export const addLeaderBoardUser = async (
+  user_id: string | undefined,
+  problem_id: string
+) => {
+  const user = await User.findById(user_id);
+
+  if (!user) throw new Error("User not exist");
+
+  const index = user.problems.findIndex((id) => id === String(problem_id));
+  if (index === -1) {
+    user?.problems.push(problem_id);
+    await user?.save();
   }
 };
