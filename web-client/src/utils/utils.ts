@@ -32,7 +32,7 @@ export function generateArray(str: string): string[] {
 }
 
 export function generateString(array: string[]): string {
-  return array.join(", ");
+  return array.join(",");
 }
 
 export function generateRandomString(length: number, seed?: string) {

@@ -7,19 +7,6 @@ import useApiResponse from "../../hooks/useApiResponse";
 import api from "../../utils/api";
 import Loader from "../../common/Loader";
 
-// const problem = {
-//   title: "Title of the problems",
-//   description:
-//     "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quaerat ex perspiciatis iure a assumenda magnam consequuntur! Quo quisquam quas nihil minus sed consectetur eos dolorem amet ipsa reiciendis tempore, qui nesciunt, ex itaque cupiditate eligendi explicabo quidem doloribus ipsum omnis distinctio sit suscipit. Laudantium optio enim fuga officia, illum hic!",
-//   difficulty: "Easy",
-//   inputformat:
-//     "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum libero molestias sed quisquam, minus ipsa.",
-//   outputformat: "Lorem ipsum dolor sit amet, consectetur adipisicing elit",
-//   exampleinput: ["4", "1 2 3 4"],
-//   exampleoutput: ["5"],
-//   constraints: ["N <= 300", "M > 1000"],
-// };
-
 export default function ProblemPage() {
   const { authenticated } = useAuth();
   const params = useParams();
@@ -65,7 +52,7 @@ export default function ProblemPage() {
                   {problem.difficulty}
                 </p>
               </div>
-              <figure className="h-[0.05rem] bg-back/20 w-full my-2"></figure>
+              <figure className="h-[0.05rem] bg-back/20 w-full my-2" />
               <p className="text-secondary font-poppins">
                 {problem.description}
               </p>
@@ -84,33 +71,21 @@ export default function ProblemPage() {
               <h3 className="font-inter font-medium text-back text-xl">
                 Constraints
               </h3>
-              <div className="flex flex-col gap-y-1">
-                {problem.constraints.map((cons, key) => (
-                  <p key={key} className="text-secondary font-poppins">
-                    {cons}
-                  </p>
-                ))}
-              </div>
+              <pre className="text-secondary font-poppins break-words whitespace-pre-wrap">
+                {problem.constraints}
+              </pre>
               <h3 className="font-inter font-medium text-back text-xl">
                 Example
               </h3>
               <div className="flex flex-col gap-y-1">
                 <p className="text-back font-poppins">input</p>
-                <div className="w-full flex flex-col gap-y-1 rounded-lg bg-black-1 p-2">
-                  {problem.exampleinput.map((input, key) => (
-                    <p key={key} className="text-secondary font-poppins">
-                      {input}
-                    </p>
-                  ))}
-                </div>
+                <pre className="w-full rounded-lg bg-black-1 p-2 text-secondary font-poppins break-words whitespace-pre-wrap">
+                  {problem.exampleinput}
+                </pre>
                 <p className="text-back font-poppins">output</p>
-                <div className="w-full flex flex-col gap-y-1 rounded-lg bg-black-1 p-2">
-                  {problem.exampleoutput.map((output, key) => (
-                    <p key={key} className="text-secondary font-poppins">
-                      {output}
-                    </p>
-                  ))}
-                </div>
+                <pre className="w-full rounded-lg bg-black-1 p-2 text-secondary font-poppins break-words whitespace-pre-wrap">
+                  {problem.exampleoutput}
+                </pre>
               </div>
             </div>
           </div>

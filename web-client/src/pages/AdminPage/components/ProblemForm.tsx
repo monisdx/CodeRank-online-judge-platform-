@@ -43,11 +43,11 @@ export default function ProblemForm(props: {
         title: props.default?.title,
         description: props.default?.description,
         difficulty: props.default?.difficulty,
-        constraint: generateString(props.default?.constraints),
+        constraint: props.default?.constraints,
         inputformat: props.default?.inputformat,
         outputformat: props.default?.outputformat,
-        exampleinput: generateString(props.default?.exampleinput),
-        exampleoutput: generateString(props.default?.exampleoutput),
+        exampleinput: props.default?.exampleinput,
+        exampleoutput: props.default?.exampleoutput,
         testcaseinputs: generateString(inputs),
         testcaseoutputs: generateString(outputs),
       });
@@ -70,6 +70,7 @@ export default function ProblemForm(props: {
       toast.error({ title: "Difficulty is not selected" });
       return;
     }
+
     const inputs = generateArray(form.testcaseinputs);
     const outputs = generateArray(form.testcaseoutputs);
 
@@ -84,11 +85,11 @@ export default function ProblemForm(props: {
       title: form.title,
       description: form.description,
       difficulty: form.difficulty,
-      constraints: generateArray(form.constraint),
+      constraints: form.constraint,
       inputformat: form.inputformat,
       outputformat: form.outputformat,
-      exampleinput: generateArray(form.exampleinput),
-      exampleoutput: generateArray(form.exampleoutput),
+      exampleinput: form.exampleinput,
+      exampleoutput: form.exampleoutput,
       testcases: generateTestcases(inputs, outputs),
     };
 
@@ -164,7 +165,7 @@ export default function ProblemForm(props: {
             required={true}
             onChange={handleChange}
             placeholder="Enter description for problem"
-            className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary"
+            className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary scrollbar-primary"
           />
         </label>
         <label className="flex flex-col relative">
@@ -218,8 +219,7 @@ export default function ProblemForm(props: {
         </label>
         <label className="flex flex-col">
           <span className="text-back font-medium mb-4">Input Format</span>
-          <textarea
-            rows={2}
+          <input
             name="inputformat"
             value={form.inputformat}
             required={true}
@@ -230,8 +230,7 @@ export default function ProblemForm(props: {
         </label>
         <label className="flex flex-col">
           <span className="text-back font-medium mb-4">Output Format</span>
-          <textarea
-            rows={2}
+          <input
             name="outputformat"
             value={form.outputformat}
             required={true}
@@ -242,62 +241,62 @@ export default function ProblemForm(props: {
         </label>
         <label className="flex flex-col">
           <span className="text-back font-medium mb-4">Constraints</span>
-          <input
-            type="text"
+          <textarea
+            rows={3}
             name="constraint"
             value={form.constraint}
             required={true}
             onChange={handleChange}
             placeholder="Enter constraints for problem"
-            className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary"
+            className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary scrollbar-primary"
           />
         </label>
         <label className="flex flex-col">
           <span className="text-back font-medium mb-4">Example input</span>
-          <input
-            type="text"
+          <textarea
+            rows={3}
             name="exampleinput"
             value={form.exampleinput}
             required={true}
             onChange={handleChange}
             placeholder="Enter input for problem"
-            className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary"
+            className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary scrollbar-primary"
           />
         </label>
         <label className="flex flex-col">
           <span className="text-back font-medium mb-4">Example output</span>
-          <input
-            type="text"
+          <textarea
+            rows={3}
             name="exampleoutput"
             value={form.exampleoutput}
             required={true}
             onChange={handleChange}
             placeholder="Enter output for problem"
-            className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary"
+            className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary scrollbar-primary"
           />
         </label>
         <label className="flex flex-col">
           <span className="text-back font-medium mb-4">Testcase inputs</span>
-          <input
-            type="text"
+          <textarea
+            rows={3}
             name="testcaseinputs"
             value={form.testcaseinputs}
             required={true}
             onChange={handleChange}
             placeholder="Enter testcase inputs"
-            className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary"
+            className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary scrollbar-primary"
           />
         </label>
         <label className="flex flex-col">
           <span className="text-back font-medium mb-4">Testcase outputs</span>
-          <input
-            type="text"
+          <textarea
+            rows={3}
             name="testcaseoutputs"
             value={form.testcaseoutputs}
             required={true}
             onChange={handleChange}
             placeholder="Enter testcase outputs"
-            className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary"
+            className="bg-black-1 py-4 px-6 placeholder:text-secondary text-back rounded-lg outline-none border-none font-medium  focus-visible:ring-primary focus-visible:ring-1 caret-primary scrollbar-primary"
           />
         </label>
         <div className="flex items-center justify-end w-full">

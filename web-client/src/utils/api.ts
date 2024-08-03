@@ -196,13 +196,14 @@ const api = {
       title: string,
       description: string,
       difficulty: string,
-      constraints: string[],
+      constraints: string,
       inputformat: string,
       outputformat: string,
-      exampleinput: string[],
-      exampleoutput: string[],
+      exampleinput: string,
+      exampleoutput: string,
       testcases: Testcase[] | boolean
     ) {
+      ensureToken();
       const response = await client.post<{ message: string }>("/problem", {
         title,
         description,
@@ -227,13 +228,14 @@ const api = {
       title: string,
       description: string,
       difficulty: string,
-      constraints: string[],
+      constraints: string,
       inputformat: string,
       outputformat: string,
-      exampleinput: string[],
-      exampleoutput: string[],
+      exampleinput: string,
+      exampleoutput: string,
       testcases: Testcase[] | boolean
     ) {
+      ensureToken();
       const response = await client.put<{ message: string }>(`/problem/${id}`, {
         title,
         description,
@@ -276,7 +278,6 @@ const api = {
     },
 
     async getProblem(config: Filter) {
-      console.log(config);
       const response = await client.get("/problem/search", {
         params: { keyword: "two", difficulty: "Easy" },
       });

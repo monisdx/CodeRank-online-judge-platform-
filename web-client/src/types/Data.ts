@@ -15,9 +15,9 @@ export interface Problem {
   difficulty: string;
   inputformat: string;
   outputformat: string;
-  constraints: string[];
-  exampleinput: string[];
-  exampleoutput: string[];
+  constraints: string;
+  exampleinput: string;
+  exampleoutput: string;
   testcases: Testcase[];
 }
 

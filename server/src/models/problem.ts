@@ -6,9 +6,9 @@ const ProblemSchema = new mongoose.Schema({
   difficulty: String,
   inputformat: String,
   outputformat: String,
-  constraints: [String],
-  exampleinput: [String],
-  exampleoutput: [String],
+  constraints: String,
+  exampleinput: String,
+  exampleoutput: String,
   testcases: [{ input: String, expectedoutput: String }],
 });
 
