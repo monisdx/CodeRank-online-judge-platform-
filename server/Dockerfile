@@ -10,6 +10,6 @@ RUN yarn install
 
 COPY . .
 
-EXPOSE 9090
+EXPOSE 8080
 
 CMD ["yarn", "dev"]

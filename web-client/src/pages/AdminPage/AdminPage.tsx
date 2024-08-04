@@ -83,7 +83,7 @@ export default function AdminPage() {
           !loading &&
           data &&
           (problems && problems.length > 0 ? (
-            <div className="flex min-h-screen flex-col gap-y-4 mt-10">
+            <div className="flex h-[70vh] flex-col gap-y-4 mt-10 overflow-y-auto scrollbar-primary">
               {problems.map((pro, key) => (
                 <ProblemCard
                   problem={pro}

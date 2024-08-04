@@ -131,7 +131,7 @@ export default function ProblemListPage() {
                       navigate({
                         pathname: "/problems",
                         search: objectToQueryString({
-                          ...config,
+                          keyword: search,
                           difficulty: data,
                         }),
                       });

@@ -8,20 +8,20 @@ export default function Hero() {
       <div className="relative" ref={parallaxRef}>
         <div className="z-1 relative max-w-[62rem] mx-auto text-center mt-[5rem] mb-[3.875rem]">
           <h1 className="font-semibold mobile:text-[2.5rem] mobile:leading-[3.25rem] widescreen:text-[4rem] widescreen:leading-[4 rem] font-poppins text-back mb-6">
-            Explore the Possibilities of&nbsp;AI&nbsp;Chatting with {` `}{" "}
-            CodeMaster
+            Every idea has a first line of code. Prep for jobs and sharpen your
+            skills
           </h1>
           <p className="max-w-3xl mx-auto mb-6 text-back/60">
-            Unleash the power of AI within Brainwave. Upgrade your productivity
-            with Brainwave, the open AI chat app.
+            CodeMaster is the best platform to help you enhance your skills,
+            expand your knowledge and prepare for technical interviews.
           </p>
         </div>
         <div className="relative mobile:max-w-[23rem] mx-auto widescreen:max-w-5xl widescreen:mb-[10rem] mobile:mb-[6rem]">
           <div className="relative z-1 p-0.5 rounded-2xl bg-conic-gradient">
             <div className="relative z-1 mobile:aspect-[33/40] rounded-b-[0.9rem] overflow-hidden  widescreen:aspect-[1024/490] rounded-2xl">
               <img
-                src={"/images/robot.jpg"}
-                className="w-full scale-[1.7] translate-y-[8%] md:scale-[1] md:-translate-y-[10%] lg:-translate-y-[23%]"
+                src={"/images/Hero.jpeg"}
+                className="w-full h-full"
                 width={1024}
                 height={490}
                 alt="AI"
