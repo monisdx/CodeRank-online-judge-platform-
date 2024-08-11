@@ -11,7 +11,7 @@ export default function LeaderBoard() {
 
   return (
     <>
-      <div className="flex flex-col max-h-[70vh] widescreen:flex-[.3] bg-black-1 rounded-2xl p-5 items-center">
+      <div className="flex flex-col max-h-[75vh] widescreen:flex-[.3] bg-black-1 rounded-2xl p-5 items-center">
         <h1 className="font-inter font-bold text-back text-2xl">Leaderboard</h1>
         <p className="font-inter font-medium text-secondary">
           Top Problem Solvers
