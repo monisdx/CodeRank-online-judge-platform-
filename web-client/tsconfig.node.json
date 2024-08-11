@@ -4,7 +4,7 @@
     "module": "ESNext",
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
-    "types": ["vite/client","node"],
+    "types": ["node"],
     "typeRoots": ["./node_modules/@types/", "./types"],
   },
   "include": ["vite.config.ts"]
