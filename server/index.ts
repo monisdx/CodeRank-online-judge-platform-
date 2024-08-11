@@ -19,6 +19,11 @@ app.use("/auth", userRoutes);
 app.use("/problem", problemRoutes);
 app.use("/compiler", compilerRoutes);
 app.use("/submission", submissionRoutes);
+
+app.use("/", (req, res) => {
+  res.send("CodeRank Server is Running");
+});
+
 const PORT = Number(process.env.PORT) || 8080;
 
 mongoose
