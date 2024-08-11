@@ -17,7 +17,7 @@ export default function Navbar() {
     <nav className="p-page w-full flex py-5 justify-evenly items-center z-[999] bg-black-8 border-black-6 border-b-2">
       <Link to="/" className="flex items-center gap-4 cursor-pointer">
         <img src={"/images/brain.svg"} alt="logo" className=" w-9 h-9" />
-        <p className="text-back font-bold text-lg font-raleway">CodeMaster</p>
+        <p className="text-back font-bold text-lg font-raleway">CodeRank</p>
       </Link>
       <div className="widescreen:flex hidden justify-center items-center gap-x-20 flex-1">
         {navLinks.map((item, key) => (

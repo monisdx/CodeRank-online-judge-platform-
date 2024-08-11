@@ -9,7 +9,7 @@ export default function Header() {
     <nav className="p-page w-full flex py-5 justify-between items-center z-[999] bg-black-1 border-b-black-2 border-b ">
       <Link to="/" className=" relative flex items-center gap-4 cursor-pointer">
         <img src={"/images/brain.svg"} alt="logo" className=" w-9 h-9" />
-        <h1 className="text-back font-bold text-lg font-inter">CodeMaster</h1>
+        <h1 className="text-back font-bold text-lg font-inter">CodeRank</h1>
         <p className="text-xs font-medium text-back font-inter absolute top-[2rem] right-[0.1rem]">
           admin
         </p>

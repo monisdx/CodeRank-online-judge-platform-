@@ -12,7 +12,7 @@ export default function Hero() {
             skills
           </h1>
           <p className="max-w-3xl mx-auto mb-6 text-back/60">
-            CodeMaster is the best platform to help you enhance your skills,
+            CodeRank is the best platform to help you enhance your skills,
             expand your knowledge and prepare for technical interviews.
           </p>
         </div>
