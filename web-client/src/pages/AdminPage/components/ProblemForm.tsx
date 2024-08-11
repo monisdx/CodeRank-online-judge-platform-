@@ -131,7 +131,6 @@ export default function ProblemForm(props: {
           dataform.testcases
         )
         .then((res) => {
-          console.log(res);
           toast.display({ title: res });
           props.saveCallback && props.saveCallback();
         })

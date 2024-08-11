@@ -10,7 +10,7 @@ import Loader from "../../common/Loader";
 export default function ProblemPage() {
   const { authenticated } = useAuth();
   const params = useParams();
-  console.log(params);
+
   if (!params.id) return <Navigate to={"/problems"} />;
 
   const { data, loading } = useApiResponse(

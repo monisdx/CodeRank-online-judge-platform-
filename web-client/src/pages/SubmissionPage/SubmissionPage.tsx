@@ -10,7 +10,7 @@ export default function SubmissionPage() {
   const { loading, data } = useApiResponse(api.submission.getMySubmission);
 
   const mySubmissions = data?.submissionLists;
-  console.log(mySubmissions);
+
   return (
     <section className="min-h-screen widescreen:w-4/5 mx-auto p-page py-10 bg-black-3 flex flex-col gap-y-10">
       <h1 className="font-cabin font-bold text-back text-2xl">

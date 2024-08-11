@@ -44,7 +44,6 @@ export default function Contact() {
         setForm({ name: "", email: "", message: "" });
       }),
       (error: any) => {
-        console.log(error);
         setLoading(false);
         toast.error({ title: "Something went wrong" });
       };

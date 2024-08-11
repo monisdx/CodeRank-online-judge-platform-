@@ -43,7 +43,6 @@ function createApi() {
     },
 
     function (error) {
-      console.log(error);
       const res = error?.response || error;
       if (
         (res?.data?.message == "invalid token" ||
@@ -112,7 +111,7 @@ const api = {
         "/auth/signin",
         { email, password }
       );
-      console.log(response);
+
       const userData = response.data;
 
       checkAndHandleError(userData);
@@ -301,7 +300,6 @@ const api = {
       });
 
       const data = response.data;
-      console.log(data);
 
       checkAndHandleError(data);
 
